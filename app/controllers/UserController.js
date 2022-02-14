@@ -14,9 +14,8 @@ const upload = multer({ storage: storage });
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-const User = require('./User');
+const User = require('../models/User');
 const { json } = require('body-parser');
-
 
 //Get per aconseguir la URL (http://localhost:3000/user)
 router.get('/user', function (req, res) {
@@ -45,5 +44,29 @@ router.post('/upload', upload.single('image'),function(req,res,next){
         });
     }
 });
+
+router.post('/time', function(req,res,next){
+    let ms = Date.now()
+    let time = new Date(ms);
+    let dia = time.getDate();
+    let mes = time.getMonth();
+    let any = time.getFullYear();
+    let hora = time.getHours();
+    let minuts = time.getMinutes();
+
+    let datahora = {'datayhora':
+    [{
+        "data":`${dia}/${mes}/${any}`,
+        "hora": `${hora}:${minuts}`
+    }]}
+    let jsonSend = {
+        'test':
+             [{
+                 "nom": 'ferran'
+             }]
+            }
+    res.status(200).send(jsonSend);
+    console.log(datahora)
+})
 
 module.exports = router;
