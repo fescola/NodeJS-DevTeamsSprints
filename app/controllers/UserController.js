@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const multer  = require('multer');
+const cors = require('cors')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'uploads')
     }
 });
-
 const upload = multer({ storage: storage });
 
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -45,28 +45,26 @@ router.post('/upload', upload.single('image'),function(req,res,next){
     }
 });
 
-router.post('/time', function(req,res,next){
-    let ms = Date.now()
-    let time = new Date(ms);
-    let dia = time.getDate();
-    let mes = time.getMonth();
-    let any = time.getFullYear();
-    let hora = time.getHours();
-    let minuts = time.getMinutes();
+//Nivell 2, config de CORS i post /time
+const cacheMW = (req,res,next) =>{
+    res.set('Cache-control','no-cache')
+    next()
+}
+const authMW =(req,res,next)=>{
+    if (!req.headers.authorization) {
+        return res.status(403).json({ error: 'No credentials sent!' });
+      }
+      next();
+}
 
-    let datahora = {'datayhora':
-    [{
-        "data":`${dia}/${mes}/${any}`,
-        "hora": `${hora}:${minuts}`
-    }]}
-    let jsonSend = {
-        'test':
-             [{
-                 "nom": 'ferran'
-             }]
-            }
-    res.status(200).send(jsonSend);
-    console.log(datahora)
+//Nivell 2 i 3, cors, cache middleware y authentication middleware
+router.post('/time',cors(),cacheMW,authMW,function(req,res,next){
+    const {user} = req.body
+    dateNow = {
+        user,
+        date: new Date().toLocaleString()
+    }
+    res.status(200).send({dateNow})
 })
 
 module.exports = router;
