@@ -1,7 +1,10 @@
 const { Sequelize, DataTypes } = require('sequelize');
-
-const sequelize = new Sequelize('sqlite::memory:') 
-
+const sequelize = new Sequelize('sqlite::memory:')/*
+const sequelize = new Sequelize('database', 'root', 'password', {
+  host: 'localhost',
+  dialect: 'mysql'
+});
+*/
 try {
    // sequelize.authenticate();
     console.log('Connection has been established successfully.');
@@ -10,7 +13,7 @@ try {
   }
 
 
-class Daus{
+class Joc{
     constructor(data){
         console.log(data);
         Object.assign(this, data);
@@ -18,22 +21,25 @@ class Daus{
     }
 
     async guardar(data){
-        const test = DauSQL.build({tirada: data})
+        const test = DauSQL.build({
+          nom: data.nom
+        })
         await test.save()
-        console.log(this.dbo.tirada)
         console.table( await DauSQL.findAll({ raw: true }))
     }
 }
 
-const DauSQL = sequelize.define('Dau', {
+const DauSQL = sequelize.define('Jugador', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
-  tirada: {
-    type: DataTypes.INTEGER
-    //allowNull: false
+  nom:{
+    type: DataTypes.STRING
+  },
+  data: {
+    type: DataTypes.DATE
   }
 }, {
   createdAt: false,
@@ -41,11 +47,12 @@ const DauSQL = sequelize.define('Dau', {
 });
 
 (async () => {
+  const date = new Date();
   await sequelize.sync();
   await DauSQL.bulkCreate([
-    { tirada: 3},
-    { tirada: 7 }
+    { nom: 'pep',tirades: [3,5],data: date},
+    { nom: 'pap',tirades: [7],data: date }
   ]);
 })();
 
-  module.exports = Daus;
+  module.exports = Joc;
