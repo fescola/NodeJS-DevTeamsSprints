@@ -6,6 +6,10 @@ class Joc {
     llistarTots(){
         console.table(this.players)
     }
+    tirada(player){
+        let novaTirada = (Math.floor(Math.random() * 6) + 1) + (Math.floor(Math.random() * 6) + 1 )
+        player.tirades.push(novaTirada)
+    }
 }
 
 const testing = []
@@ -24,4 +28,5 @@ const jugador2 = {
 
 testing.push(jugador2,jugador1)
 const jocTest = new Joc(testing)
+jocTest.tirada(jugador1)
 jocTest.llistarTots()

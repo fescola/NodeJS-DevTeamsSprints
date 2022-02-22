@@ -1,32 +1,38 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('sqlite::memory:')/*
-const sequelize = new Sequelize('database', 'root', 'password', {
-  host: 'localhost',
-  dialect: 'mysql'
+const config = require('../../config')
+const mysql = require('mysql2/promise');
+//const sequelize = new Sequelize('sqlite::memory:')
+const db = {}
+initialize()
+
+async function initialize(){
+  
+  const connection = await mysql.createConnection({ host:config.host, port:config.port, user:config.user, password:config.password });
+  await connection.query(`CREATE DATABASE IF NOT EXISTS \`${config.database}\`;`);
+
+  const sequelize = new Sequelize(config.database, config.user,config.password , {
+    host: config.host,
+    dialect: config.dialect
 });
-*/
-try {
-   // sequelize.authenticate();
-    console.log('Connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
 
 
 class Joc{
-    constructor(data){
-        console.log(data);
-        Object.assign(this, data);
-        //this.dbo = DauSQL.build(data);
-    }
+  constructor(data){
+      console.log(data);
+      Object.assign(this, data);
+      //this.dbo = DauSQL.build(data);
+  }
 
-    async guardar(data){
-        const test = DauSQL.build({
-          nom: data.nom
-        })
-        await test.save()
-        console.table( await DauSQL.findAll({ raw: true }))
-    }
+  async guardar(data){
+      const test = DauSQL.build({
+        nom: data.nom
+      })
+      await test.save()
+      console.table( await DauSQL.findAll({ raw: true }))
+  }
+  async editar(data){
+
+  }
 }
 
 const DauSQL = sequelize.define('Jugador', {
@@ -54,5 +60,6 @@ const DauSQL = sequelize.define('Jugador', {
     { nom: 'pap',tirades: [7],data: date }
   ]);
 })();
+}
 
-  module.exports = Joc;
+  module.exports = db;
