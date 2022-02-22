@@ -1,7 +1,7 @@
 const express = require('express');
-const sequelize = require('../models/sqlDB');
 const router = express.Router();
-const Joc = require('../models/Joc')
+const Joc = require('../models/sqlDB')
+
 
 const joc = new Joc()
 
@@ -9,8 +9,10 @@ const test = (req,res,next) =>{
     res.json({message: "test"})
     joc.guardar({ nom: 'ferran',tirades: [3,5]})
 }
-const postPlayers = (req,res,next)=>{
-    res.send('postPlayers')
+const postPlayers = (req,res)=>{
+    console.log(req.body)
+    //joc.guardar(req)
+    res.send(req.body)
 }
 const games = (req,res,next)=>{
     let ID = req.params.id;

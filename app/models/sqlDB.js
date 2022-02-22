@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const config = require('../../config')
 const mysql = require('mysql2/promise');
+const Joc = require('./Joc');
 //const sequelize = new Sequelize('sqlite::memory:')
 const db = {}
 initialize()
@@ -24,6 +25,7 @@ class Joc{
   }
 
   async guardar(data){
+    console.log('guardar' + data)
       const test = DauSQL.build({
         nom: data.nom
       })
@@ -62,4 +64,4 @@ const DauSQL = sequelize.define('Jugador', {
 })();
 }
 
-  module.exports = db;
+  module.exports = Joc;

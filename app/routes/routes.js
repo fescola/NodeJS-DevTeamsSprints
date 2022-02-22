@@ -1,9 +1,11 @@
 
 var express = require('express');
-const req = require('express/lib/request');
-const res = require('express/lib/response');
+//const req = require('express/lib/request');
+//const res = require('express/lib/response');
 var router = express.Router();
 const controller = require('../controllers/controller');
+
+
 
 
 // Home page route.
@@ -12,7 +14,8 @@ router.get('/', function (req, res) {
 })
 
 // About page route.
-router.get('/about', function (req, res) {
+router.post('/about',function (req, res) {
+  console.log(req)
   res.send('About this wiki');
 })
 router.post('/test',controller.test)
