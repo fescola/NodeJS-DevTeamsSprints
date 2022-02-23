@@ -2,6 +2,7 @@ class Joc {
     constructor(players){
         //array d objectes player
         this.players = players;
+        console.log('this is joc(game)')
     }
     llistarTots(){
         console.table(this.players)

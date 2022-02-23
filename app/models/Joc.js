@@ -1,34 +1,21 @@
+const { Sequelize, DataTypes } = require('sequelize');
 
-class Joc{
-    constructor(data){
-        console.log(data);
-        Object.assign(this, data);
-        //this.dbo = DauSQL.build(data);
-    }
 
-    async guardar(data){
-        const test = DauSQL.build({
-          nom: data.nom
-        })
-        await test.save()
-        console.table( await DauSQL.findAll({ raw: true }))
-    }
-    async editar(data){
-
-    }
-}
- /*
-  const Partida = sequelize.define('Partida',{
-    id:{
+const model = (sequelize) => {
+  return sequelize.define('Joc', {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
     },
-    resultat:{
-      type: DataTypes.INTEGER,
-      autoIncrement: false,
-      primaryKey: false
+    tirada:{
+      type: DataTypes.INTEGER
     }
-  })
-  */
-module.exports = Joc
+  }, {
+    createdAt: false,
+    updatedAt: false
+  });
+
+  //return sequelize.define('Jugador', attributes, options);
+}
+  module.exports = model;

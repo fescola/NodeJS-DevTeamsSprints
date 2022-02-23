@@ -1,14 +1,5 @@
-const Daus = require('../models/sqlDB')
+const db = requiere('../models/sqlDB')
 
-async function llistarTots(){
-
-}
-async function eliminarTirades(){
-
-}
-async function registrarPlayer(){
-
-}
-async function llistarTirades(){
-
+async function test(){
+    console.log( await db.Jugador.findAll())
 }

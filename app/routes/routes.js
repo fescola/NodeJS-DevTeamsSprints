@@ -6,8 +6,6 @@ var router = express.Router();
 const controller = require('../controllers/controller');
 
 
-
-
 // Home page route.
 router.get('/', function (req, res) {
   res.send('Wiki home page');
@@ -24,7 +22,7 @@ router.post(`/players/:id/games`,controller.games) //ID part to fix
 router.put('/players',controller.putPlayers)
 router.delete(`/players/:id/games`,controller.deletePlayers)
 router.get('/players',controller.getPlayers)
-router.get(`players/:id/games`,controller.getGames)
+router.get('/players/:id/games',controller.getGames)
 router.get('/players/ranking',controller.ranking)
 router.get('/ranking/loser',controller.loser)
 router.get('/ranking/winner',controller.winner)
