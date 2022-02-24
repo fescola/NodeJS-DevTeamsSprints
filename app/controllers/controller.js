@@ -15,42 +15,65 @@ const postPlayers = async (req,res)=>{
     if (await db.Jugador.findOne({ where: { nom: params.nom } })) {
         res.send( 'Username "' + params.nom + '" is already taken')
     }
-    // save user
-    else(
+    if(params.nom == ''){
+        params.nom = 'Anonim'
+    }
     await db.Jugador.create(params)
-    )
     res.send('postPlayers')
 }
-const games = (req,res,next)=>{
-    if(await db.Jugador.findOne({ where: { id: req.params.id } })){
-        
+//POST /players/{id}/games: un jugador específic realitza una tirada
+const games = async (req,res,next)=>{
+    const data = {}
+    const player = await db.Jugador.findOne({ where: { id: req.params.id } })
+    data.tirada = (Math.floor(Math.random() * 6) + 1) + (Math.floor(Math.random() * 6) + 1 )
+    data.JugadorId = req.params.id
+    if(player){
+        console.log(req.params.id)
+        db.Joc.create(data)
+        res.send(`Jugador: ${player.nom} Nova tirada ${data.tirada}`)
     }
-    res.send('games')
+    if(!player){
+        res.send('player id not found')
+    }
 }
-const putPlayers = (req,res,next)=>{
+//
+const putPlayers = async (req,res)=>{
     let ID = req.params.id
     res.send('putPlayers')
 }
-const deletePlayers = (req,res,next)=>{
-    let ID = req.params.id;
-    res.send('deletePlayers')
+const deletePlayers = async (req,res)=>{
+    if(!await db.Joc.findOne({ where: { JugadorId: req.params.id } })){
+        res.send('player id not found')
+    }
+    await db.Joc.destroy({where:{JugadorId: req.params.id}})
+    res.send('jugades destruides')
 }
-const getPlayers = async (req,res,next)=>{
-    res.send(await db.Jugador.findAll())
+const getPlayers = async (req,res)=>{
+    const tirades = await db.Joc.findAll()
+    let players = []
+    tirades.forEach(roll => {
+        players.push(roll.tirada)
+        })
+        console.log(players)
+    // while(players.length() > 0){
+    //     llista.push(players)
+    // }
+    //res.send(await db.Jugador.findAll())
+    res.send('a')
 }
-const getGames = async (req,res,next)=>{
+const getGames = async (req,res)=>{
     let data = await db.Jugador.findOne({where:{id: req.params.id}})
     res.send(data)
 }
-const ranking = (req,res,next)=>{
+const ranking = (req,res)=>{
     console.log("ranking console")
     res.send('ranking')
 }
-const loser = (req,res,next)=>{
+const loser = (req,res)=>{
     console.log("loser console")
     res.send('loser')
 }
-const winner = (req,res,next)=>{
+const winner = (req,res)=>{
     res.send('winner')
 }
 module.exports = {
