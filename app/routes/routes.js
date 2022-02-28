@@ -16,7 +16,6 @@ router.post('/about',function (req, res) {
   console.log(req)
   res.send('About this wiki');
 })
-router.post('/test',controller.test)
 router.post('/players',controller.postPlayers)
 router.post(`/players/:id/games`,controller.games) //ID part to fix
 router.put('/players',controller.putPlayers)
@@ -24,8 +23,8 @@ router.delete(`/players/:id/games`,controller.deletePlayers)
 router.get('/players',controller.getPlayers)
 router.get('/players/:id/games',controller.getGames)
 router.get('/players/ranking',controller.ranking)
-router.get('/ranking/loser',controller.loser)
-router.get('/ranking/winner',controller.winner)
+router.get('/players/ranking/loser',controller.loser)
+router.get('/players/ranking/winner',controller.winner)
 module.exports = router;
 
 /*

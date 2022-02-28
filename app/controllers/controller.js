@@ -4,12 +4,7 @@ const router = express.Router();
 const db = require('../models/sqlDB')
 
 
-const test = (req,res,next) =>{
-    res.json({message: "test"})
-    //joc.guardar({ nom: 'ferran',tirades: [3,5]})
-}
 const postPlayers = async (req,res)=>{
-    //joc.guardar(req.body)
     let params = req.body
     console.log(db.Jugador)
     if (await db.Jugador.findOne({ where: { nom: params.nom } })) {
@@ -21,8 +16,8 @@ const postPlayers = async (req,res)=>{
     await db.Jugador.create(params)
     res.send('postPlayers')
 }
-//POST /players/{id}/games: un jugador específic realitza una tirada
-const games = async (req,res,next)=>{
+
+const games = async (req,res)=>{
     const data = {}
     const player = await db.Jugador.findOne({ where: { id: req.params.id } })
     data.tirada = (Math.floor(Math.random() * 6) + 1) + (Math.floor(Math.random() * 6) + 1 )
@@ -38,8 +33,19 @@ const games = async (req,res,next)=>{
 }
 //
 const putPlayers = async (req,res)=>{
-    let ID = req.params.id
-    res.send('putPlayers')
+    const user = await db.Jugador.findOne({ where: { id: req.body.id } })
+    if(!user){
+        res.send('This ID doesnt exist')
+    }
+    else{
+        try{
+            db.Jugador.update({nom:req.body.nom},{where:{id:req.body.id}})
+            res.send(await db.Jugador.findOne({where:{id:req.body.id}}))
+        }
+        catch(e){
+            console.log(e);
+        }
+    }
 }
 const deletePlayers = async (req,res)=>{
     if(!await db.Joc.findOne({ where: { JugadorId: req.params.id } })){
@@ -48,36 +54,95 @@ const deletePlayers = async (req,res)=>{
     await db.Joc.destroy({where:{JugadorId: req.params.id}})
     res.send('jugades destruides')
 }
+//GET /players: retorna el llistat de tots els jugadors del sistema amb el seu percentatge mig d’èxits
 const getPlayers = async (req,res)=>{
-    const tirades = await db.Joc.findAll()
-    let players = []
-    tirades.forEach(roll => {
-        players.push(roll.tirada)
-        })
-        console.log(players)
-    // while(players.length() > 0){
-    //     llista.push(players)
-    // }
-    //res.send(await db.Jugador.findAll())
-    res.send('a')
+    try{
+        const players = await db.Jugador.findAll()
+        if(!players){
+            res.send('table is empty')
+        }
+        for(const player of players){
+            const jugades = await db.Joc.findAll({where:{JugadorId: player.id}})
+            let mitja = 0;
+            jugades.forEach(jugada => {
+                mitja = mitja+jugada.tirada
+            });
+            mitja = mitja/jugades.length;
+            player.dataValues.mitja = mitja;
+        }
+        res.send(players)
+    }
+    catch(e){
+        console.log(e)
+        res.send(`Error ${e}`)
+    }
 }
 const getGames = async (req,res)=>{
     let data = await db.Jugador.findOne({where:{id: req.params.id}})
-    res.send(data)
+    if(!data){
+        res.send('player id not found')
+    }
+    try{
+    let jugades = await db.Joc.findAll({where:{JugadorId: data.id}})
+    res.send(jugades)
+    }
+    catch(e){
+        console.log(e)
+    }
 }
-const ranking = (req,res)=>{
-    console.log("ranking console")
-    res.send('ranking')
+//GET /players/ranking: retorna el percentatge mig d’èxits del conjunt de tots els jugadors
+const ranking = async (req,res)=>{
+    try{
+        const mitjanes = await mitjanes()
+        let init = 0;
+        let mitja = mitjanes.reduce((pV,cV)=>pV+cV,init);
+        mitja = mitja/mitjanes.length;
+        res.send(`La mitjana de tots els jugadors es: ${mitja} %`)
+    }
+    catch(e){
+        console.log(e)
+        res.send(`Error ${e}`)
+    }
 }
-const loser = (req,res)=>{
-    console.log("loser console")
-    res.send('loser')
+//GET /players/ranking/loser: retorna el jugador amb pitjor percentatge d’èxit
+const loser = async (req,res)=>{
+    const players = await mitjanes()
+    console.log(players)
+    let loser ={}
+    for(const player of players){
+        if(player.mitja<loser.mitja){
+            loser = player;
+        }
+    }
+    console.log(`el looser es: ${loser} amb mitja de: ${loser.mitja}`)
 }
-const winner = (req,res)=>{
+const winner = async (req,res)=>{
     res.send('winner')
 }
+const mitjanes = async()=>{
+    try{
+        const players = await db.Jugador.findAll()
+       // let mitjanes=[];
+        if(!players){
+            res.send('table is empty')
+        }
+        for(const player of players){
+            const jugades = await db.Joc.findAll({where:{JugadorId: player.id}})
+            let victories = 0;
+            jugades.forEach(jugada => {
+                if(jugada.tirada == 7){
+                    victories++;
+                }
+            });
+            player.mitja = (victories/jugades.length)*100
+        }
+        return players;
+    }
+    catch(e){
+        console.log(e)
+    }
+}
 module.exports = {
-    test,
     postPlayers,
     games,
     putPlayers,
