@@ -8,7 +8,7 @@ const postPlayers = async (req,res)=>{
         let params = req.body
         params.data = Date.now()
         if (await db.Jugador.findOne({ where: { nom: params.nom } })) {
-            res.send( 'Username "' + params.nom + '" is already taken')
+            res.status(400).send( 'Username ' + params.nom + ' is already taken')
             return
         }
         if(params.nom == ''){
@@ -16,11 +16,11 @@ const postPlayers = async (req,res)=>{
         }
         else{
         await db.Jugador.create(params)
-        res.send('postPlayers')
+        res.status(200).send('Player created')
         }
     }
     catch(e){
-        console.log(e);
+        res.status(500).json(e);
     }
 }
 
@@ -33,21 +33,20 @@ const games = async (req,res)=>{
         if(player){
             console.log(req.params.id)
             db.Joc.create(data)
-            res.send(`Jugador: ${player.nom} Nova tirada ${data.tirada}`)
+            res.status(200).send(`Jugador: ${player.nom} Nova tirada ${data.tirada}`)
         }
         if(!player){
-            res.send('player id not found')
+            res.status(404).send('player id not found')
         }
     }
     catch(e){
-        console.log(e);
-    }
+        res.status(500).json(e);    }
 }
 
 const putPlayers = async (req,res)=>{
     const user = await db.Jugador.findOne({ where: { id: req.body.id } })
     if(!user){
-        res.send('This ID doesnt exist')
+        res.status(404).send('This ID doesnt exist')
     }
     else{
         try{
@@ -55,7 +54,7 @@ const putPlayers = async (req,res)=>{
             res.send(await db.Jugador.findOne({where:{id:req.body.id}}))
         }
         catch(e){
-            console.log(e);
+            res.status(500).json(e);
         }
     }
 }
@@ -63,13 +62,13 @@ const putPlayers = async (req,res)=>{
 const deletePlayers = async (req,res)=>{
     try{
         if(!await db.Joc.findOne({ where: { JugadorId: req.params.id } })){
-            res.send('player id not found')
+            res.status(404).send('player id not found')
         }
         await db.Joc.destroy({where:{JugadorId: req.params.id}})
-        res.send('jugades destruides')
+        res.status(200).send('jugades destruides')
     }
     catch(e){
-        console.log(e);
+        res.status(500).json(e);
     }
 }
 
@@ -77,7 +76,7 @@ const getPlayers = async (req,res)=>{
     try{
         const players = await db.Jugador.findAll()
         if(!players){
-            res.send('table is empty')
+            res.status(404).send('table is empty')
         }
         for(const player of players){
             const jugades = await db.Joc.findAll({where:{JugadorId: player.id}})
@@ -91,22 +90,21 @@ const getPlayers = async (req,res)=>{
         res.send(players)
     }
     catch(e){
-        console.log(e)
-        res.send(`Error ${e}`)
+        res.status(500).json(e);
     }
 }
 
 const getGames = async (req,res)=>{
     let data = await db.Jugador.findOne({where:{id: req.params.id}})
     if(!data){
-        res.send('player id not found')
+        res.status(404).send('player id not found')
     }
     try{
     let jugades = await db.Joc.findAll({where:{JugadorId: data.id}})
     res.send(jugades)
     }
     catch(e){
-        console.log(e)
+        res.status(500).json(e);
     }
 }
 
@@ -123,11 +121,10 @@ const ranking = async (req,res)=>{
         let init = 0;
         let mitja_ = mitjanes_.reduce((pV,cV)=>pV+cV,init);
         mitja_ = mitja_/mitjanes_.length;
-        res.send(`La mitjana de tots els jugadors es: ${mitja_} %`)
+        res.status(200).send(`La mitjana de tots els jugadors es: ${mitja_} %`)
     }
     catch(e){
-        console.log(e)
-        res.send(`Error ${e}`)
+        res.status(500).json(e);
     }
 }
 
@@ -148,14 +145,14 @@ const loser = async (req,res)=>{
             }
         }
         if(losers.length<=1){
-        res.send(`el looser es: ${loser.nom} amb mitja de: ${loser.mitja}`)
+        res.status(200).send(`el looser es: ${loser.nom} amb mitja de: ${loser.mitja}`)
         }
         if(losers.length>1){
-            res.send(`els losers son: ${losers}`)
+            res.status(200).send(`els losers son: ${losers}`)
         }
     }
     catch(e){
-        console.log(e)
+        res.status(500).json(e);
     }
 }
 
@@ -171,10 +168,10 @@ const winner = async (req,res)=>{
                 winner = player;
             }
         }
-        res.send(`el winner es: ${winner.nom} amb mitja de: ${winner.mitja}`)
+        res.status(200).send(`el winner es: ${winner.nom} amb mitja de: ${winner.mitja}`)
     }
     catch(e){
-        console.log(e)
+        res.status(500).json(e);
     }
 }
 
@@ -182,7 +179,7 @@ const mitjanes = async()=>{
     try{
         const players = await db.Jugador.findAll()
         if(!players){
-            res.send('table is empty')
+            res.status(404).send('table is empty')
         }
         for(const player of players){
             const jugades = await db.Joc.findAll({where:{JugadorId: player.id}})
@@ -197,7 +194,7 @@ const mitjanes = async()=>{
         return players;
     }
     catch(e){
-        console.log(e)
+        res.status(500).json(e);
     }
 }
 const getRanking = async(req,res)=>{
@@ -217,11 +214,11 @@ const getRanking = async(req,res)=>{
                     player.victories +=1;
                 }
             }
-            res.send(`tirades: ${tirades} | Victories: ${player.victories}`)
+            res.status(200).send(`tirades: ${tirades} | Victories: ${player.victories}`)
         }
     }
     catch(e){
-        console.log(e);
+        res.status(500).json(e);
     }
 }
 

@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"nom\":\"Ferran\"\r\n}",
+					"raw": "{\r\n    \"nom\":\"omar\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -158,7 +158,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/players/loser",
+					"raw": "http://localhost:3000/players/ranking/loser",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -166,6 +166,7 @@
 					"port": "3000",
 					"path": [
 						"players",
+						"ranking",
 						"loser"
 					]
 				}
@@ -178,7 +179,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/players/winner",
+					"raw": "http://localhost:3000/players/ranking/winner",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -186,7 +187,40 @@
 					"port": "3000",
 					"path": [
 						"players",
+						"ranking",
 						"winner"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get ranking of player",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nom\":\"dani\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/players/playerRanking",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"players",
+						"playerRanking"
 					]
 				}
 			},
