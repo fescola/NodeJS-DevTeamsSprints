@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-//const Joc = require('../models/Joc')
 const db = require('../models/sqlDB')
 
 
@@ -31,7 +30,7 @@ const games = async (req,res)=>{
         res.send('player id not found')
     }
 }
-//
+
 const putPlayers = async (req,res)=>{
     const user = await db.Jugador.findOne({ where: { id: req.body.id } })
     if(!user){
@@ -47,6 +46,7 @@ const putPlayers = async (req,res)=>{
         }
     }
 }
+
 const deletePlayers = async (req,res)=>{
     if(!await db.Joc.findOne({ where: { JugadorId: req.params.id } })){
         res.send('player id not found')
@@ -54,7 +54,7 @@ const deletePlayers = async (req,res)=>{
     await db.Joc.destroy({where:{JugadorId: req.params.id}})
     res.send('jugades destruides')
 }
-//GET /players: retorna el llistat de tots els jugadors del sistema amb el seu percentatge mig d’èxits
+
 const getPlayers = async (req,res)=>{
     try{
         const players = await db.Jugador.findAll()
@@ -77,6 +77,7 @@ const getPlayers = async (req,res)=>{
         res.send(`Error ${e}`)
     }
 }
+
 const getGames = async (req,res)=>{
     let data = await db.Jugador.findOne({where:{id: req.params.id}})
     if(!data){
@@ -90,39 +91,78 @@ const getGames = async (req,res)=>{
         console.log(e)
     }
 }
-//GET /players/ranking: retorna el percentatge mig d’èxits del conjunt de tots els jugadors
+
 const ranking = async (req,res)=>{
     try{
-        const mitjanes = await mitjanes()
+        const players = await mitjanes()
+        let mitjanes_ = []
+        for(const player of players){
+            if(player.mitja >= 0) {
+            mitjanes_.push(player.mitja)
+            console.log(mitjanes_)
+            }
+        }
         let init = 0;
-        let mitja = mitjanes.reduce((pV,cV)=>pV+cV,init);
-        mitja = mitja/mitjanes.length;
-        res.send(`La mitjana de tots els jugadors es: ${mitja} %`)
+        let mitja_ = mitjanes_.reduce((pV,cV)=>pV+cV,init);
+        mitja_ = mitja_/mitjanes_.length;
+        res.send(`La mitjana de tots els jugadors es: ${mitja_} %`)
     }
     catch(e){
         console.log(e)
         res.send(`Error ${e}`)
     }
 }
-//GET /players/ranking/loser: retorna el jugador amb pitjor percentatge d’èxit
+
 const loser = async (req,res)=>{
-    const players = await mitjanes()
-    console.log(players)
-    let loser ={}
-    for(const player of players){
-        if(player.mitja<loser.mitja){
-            loser = player;
+    try{
+        const players = await mitjanes()
+        let loser ={}
+        let losers = []
+        for(const player of players){
+            if(loser.mitja == undefined && player.mitja >= 0){
+                loser = player
+            }
+            if(player.mitja<loser.mitja){
+                loser = player;
+            }
+            if(player.mitja == 0 && loser.mitja == 0){
+                losers.push(player.nom)
+            }
+        }
+        if(losers.length<=1){
+        res.send(`el looser es: ${loser.nom} amb mitja de: ${loser.mitja}`)
+        }
+        if(losers.length>1){
+            res.send(`els losers son: ${losers}`)
         }
     }
-    console.log(`el looser es: ${loser} amb mitja de: ${loser.mitja}`)
+    catch(e){
+        console.log(e)
+    }
 }
+
 const winner = async (req,res)=>{
-    res.send('winner')
+    try{
+        const players = await mitjanes()
+        let winner ={}
+        for(const player of players){
+            if(winner.mitja == undefined && player.mitja >= 0){
+                winner = player
+            }
+            if(player.mitja>winner.mitja){
+                winner = player;
+            }
+        }
+        res.send(`el winner es: ${winner.nom} amb mitja de: ${winner.mitja}`)
+    }
+    catch(e){
+        console.log(e)
+    }
 }
+
 const mitjanes = async()=>{
     try{
         const players = await db.Jugador.findAll()
-       // let mitjanes=[];
         if(!players){
             res.send('table is empty')
         }
@@ -142,6 +182,7 @@ const mitjanes = async()=>{
         console.log(e)
     }
 }
+
 module.exports = {
     postPlayers,
     games,
@@ -153,13 +194,3 @@ module.exports = {
     loser,
     winner
 };
-
-/*
-router.get('/user',function(req,res){
-    const tirada = 4;
-    const test = new Joc(tirada)
-    test.guardar(tirada)
-    res.status(200).send('get working');
-})
-*/
-//module.exports = router;

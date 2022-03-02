@@ -1,21 +1,9 @@
 
 var express = require('express');
-//const req = require('express/lib/request');
-//const res = require('express/lib/response');
 var router = express.Router();
 const controller = require('../controllers/controller');
 
 
-// Home page route.
-router.get('/', function (req, res) {
-  res.send('Wiki home page');
-})
-
-// About page route.
-router.post('/about',function (req, res) {
-  console.log(req)
-  res.send('About this wiki');
-})
 router.post('/players',controller.postPlayers)
 router.post(`/players/:id/games`,controller.games) //ID part to fix
 router.put('/players',controller.putPlayers)

@@ -1,8 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const config = require('../../config')
 const mysql = require('mysql2/promise');
-//const DauSQL = require('./daus');
-//const sequelize = new Sequelize('sqlite::memory:')
 const db = {}
 initialize()
 async function initialize(){
