@@ -210,17 +210,14 @@ const getRanking = async(req,res)=>{
         else{
             const jugades = await db.Joc.findAll({where:{JugadorId: player.id}})
             let tirades = []
+            player.victories = 0;
             for(const jugada of jugades){
-                let info = {}
-                info.tirada = jugada.tirada
+                tirades.push(jugada.tirada)
                 if(jugada.tirada == 7){
-                    info.victoria = 1;
+                    player.victories +=1;
                 }
-                console.log(info)
-                tirades.push(info)
             }
-            console.log(tirades)
-            res.send(tirades)
+            res.send(`tirades: ${tirades} | Victories: ${player.victories}`)
         }
     }
     catch(e){

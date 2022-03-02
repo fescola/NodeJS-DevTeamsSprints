@@ -14,7 +14,7 @@ GET /players/{id}/games: retorna el llistat de jugades per un jugador.
 GET /players/ranking: retorna el percentatge mig d’èxits del conjunt de tots els jugadors
 GET /players/ranking/loser: retorna el jugador amb pitjor percentatge d’èxit
 GET /players/ranking/winner: retorna el jugador amb millor percentatge d’èxit
-
+GET /players/playerRanking: retorna les tirades del jugador (enviant el nom pel body com a json) y el numero de victories que te
 # Postman
 
 L'arxiu postman esta guardat a la carpeta postman del propi projecte
