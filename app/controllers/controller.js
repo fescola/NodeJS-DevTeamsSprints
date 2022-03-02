@@ -4,55 +4,75 @@ const db = require('../models/sqlDB')
 
 
 const postPlayers = async (req,res)=>{
-    let params = req.body
-    console.log(db.Jugador)
-    if (await db.Jugador.findOne({ where: { nom: params.nom } })) {
-        res.send( 'Username "' + params.nom + '" is already taken')
+    try{
+        let params = req.body
+        console.log(db.Jugador)
+        if (await db.Jugador.findOne({ where: { nom: params.nom } })) {
+            res.send( 'Username "' + params.nom + '" is already taken')
+        }
+        if(params.nom == ''){
+            params.nom = 'Anonim'
+        }
+        await db.Jugador.create(params)
+        res.send('postPlayers')
     }
-    if(params.nom == ''){
-        params.nom = 'Anonim'
+    catch(e){
+        console.log(e);
     }
-    await db.Jugador.create(params)
-    res.send('postPlayers')
 }
 
 const games = async (req,res)=>{
-    const data = {}
-    const player = await db.Jugador.findOne({ where: { id: req.params.id } })
-    data.tirada = (Math.floor(Math.random() * 6) + 1) + (Math.floor(Math.random() * 6) + 1 )
-    data.JugadorId = req.params.id
-    if(player){
-        console.log(req.params.id)
-        db.Joc.create(data)
-        res.send(`Jugador: ${player.nom} Nova tirada ${data.tirada}`)
+    try{
+        const data = {}
+        const player = await db.Jugador.findOne({ where: { id: req.params.id } })
+        data.tirada = (Math.floor(Math.random() * 6) + 1) + (Math.floor(Math.random() * 6) + 1 )
+        data.JugadorId = req.params.id
+        if(player){
+            console.log(req.params.id)
+            db.Joc.create(data)
+            res.send(`Jugador: ${player.nom} Nova tirada ${data.tirada}`)
+        }
+        if(!player){
+            res.send('player id not found')
+        }
     }
-    if(!player){
-        res.send('player id not found')
+    catch(e){
+        console.log(e);
     }
 }
 
 const putPlayers = async (req,res)=>{
-    const user = await db.Jugador.findOne({ where: { id: req.body.id } })
-    if(!user){
-        res.send('This ID doesnt exist')
+    try{
+        const user = await db.Jugador.findOne({ where: { id: req.body.id } })
+        if(!user){
+            res.send('This ID doesnt exist')
+        }
+        else{
+            try{
+                db.Jugador.update({nom:req.body.nom},{where:{id:req.body.id}})
+                res.send(await db.Jugador.findOne({where:{id:req.body.id}}))
+            }
+            catch(e){
+                console.log(e);
+            }
+        }
     }
-    else{
-        try{
-            db.Jugador.update({nom:req.body.nom},{where:{id:req.body.id}})
-            res.send(await db.Jugador.findOne({where:{id:req.body.id}}))
-        }
-        catch(e){
-            console.log(e);
-        }
+    catch(e){
+        console.log(e);
     }
 }
 
 const deletePlayers = async (req,res)=>{
-    if(!await db.Joc.findOne({ where: { JugadorId: req.params.id } })){
-        res.send('player id not found')
+    try{
+        if(!await db.Joc.findOne({ where: { JugadorId: req.params.id } })){
+            res.send('player id not found')
+        }
+        await db.Joc.destroy({where:{JugadorId: req.params.id}})
+        res.send('jugades destruides')
     }
-    await db.Joc.destroy({where:{JugadorId: req.params.id}})
-    res.send('jugades destruides')
+    catch(e){
+        console.log(e);
+    }
 }
 
 const getPlayers = async (req,res)=>{
