@@ -13,6 +13,7 @@ router.get('/players/:id/games',controller.getGames)
 router.get('/players/ranking',controller.ranking)
 router.get('/players/ranking/loser',controller.loser)
 router.get('/players/ranking/winner',controller.winner)
+router.get('/players/playerRanking',controller.getRanking)
 module.exports = router;
 
 /*

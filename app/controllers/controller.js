@@ -6,15 +6,18 @@ const db = require('../models/sqlDB')
 const postPlayers = async (req,res)=>{
     try{
         let params = req.body
-        console.log(db.Jugador)
+        params.data = Date.now()
         if (await db.Jugador.findOne({ where: { nom: params.nom } })) {
             res.send( 'Username "' + params.nom + '" is already taken')
+            return
         }
         if(params.nom == ''){
             params.nom = 'Anonim'
         }
+        else{
         await db.Jugador.create(params)
         res.send('postPlayers')
+        }
     }
     catch(e){
         console.log(e);
@@ -42,23 +45,18 @@ const games = async (req,res)=>{
 }
 
 const putPlayers = async (req,res)=>{
-    try{
-        const user = await db.Jugador.findOne({ where: { id: req.body.id } })
-        if(!user){
-            res.send('This ID doesnt exist')
-        }
-        else{
-            try{
-                db.Jugador.update({nom:req.body.nom},{where:{id:req.body.id}})
-                res.send(await db.Jugador.findOne({where:{id:req.body.id}}))
-            }
-            catch(e){
-                console.log(e);
-            }
-        }
+    const user = await db.Jugador.findOne({ where: { id: req.body.id } })
+    if(!user){
+        res.send('This ID doesnt exist')
     }
-    catch(e){
-        console.log(e);
+    else{
+        try{
+            db.Jugador.update({nom:req.body.nom},{where:{id:req.body.id}})
+            res.send(await db.Jugador.findOne({where:{id:req.body.id}}))
+        }
+        catch(e){
+            console.log(e);
+        }
     }
 }
 
@@ -202,6 +200,33 @@ const mitjanes = async()=>{
         console.log(e)
     }
 }
+const getRanking = async(req,res)=>{
+    try{
+        const player = await db.Jugador.findOne({ where: { nom: req.body.nom } })
+        if(!player){
+            res.send('player name not found')
+            return
+        }
+        else{
+            const jugades = await db.Joc.findAll({where:{JugadorId: player.id}})
+            let tirades = []
+            for(const jugada of jugades){
+                let info = {}
+                info.tirada = jugada.tirada
+                if(jugada.tirada == 7){
+                    info.victoria = 1;
+                }
+                console.log(info)
+                tirades.push(info)
+            }
+            console.log(tirades)
+            res.send(tirades)
+        }
+    }
+    catch(e){
+        console.log(e);
+    }
+}
 
 module.exports = {
     postPlayers,
@@ -212,5 +237,6 @@ module.exports = {
     getGames,
     ranking,
     loser,
-    winner
+    winner,
+    getRanking
 };
