@@ -9,4 +9,4 @@ const registerValidation = (data) => {
   return schema.validate(data);
 };
 
-module.exports = {registerValidation,};
+module.exports = {registerValidation};
