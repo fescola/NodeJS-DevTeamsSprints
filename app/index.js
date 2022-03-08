@@ -8,11 +8,15 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
 const authRoutes = require("./routes/auth");
+const dashboardRoutes = require("./routes/dashboard")
+const verifyToken = require("./routes/validate-token")
 
 app.use(express.json()); 
 
 // route middlewares
 app.use("/api/user", authRoutes);
+
+app.use("/api/dashboard",verifyToken,dashboardRoutes)
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
@@ -32,8 +36,6 @@ mongoose.connect(
     () => console.log("connected to db")
     );
 
-    
-/*
 //SOCKET STUFF 
 io.on('connection', (socket) => {
     console.log('a user connected');
@@ -58,4 +60,4 @@ io.on('connection', (socket) => {
       io.emit('chat message', msg);
     });
   });
-  */
+  

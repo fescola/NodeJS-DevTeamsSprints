@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const User = require("../models/User");
-const { registerValidation} = require("../validation");
+const { registerValidation, loginValidation} = require("../validation");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 // validation
 const Joi = require("@hapi/joi");
@@ -12,7 +13,7 @@ const schema = Joi.object({
 });
 
 router.post("/register", async (req, res) => {
-    const { error } = schema.validate(req.body);
+    const { error } = registerValidation(req.body);
 
     if(error){
         return res.status(400).json({error: error.details[0].message});
@@ -52,13 +53,29 @@ router.post("/login", async (req, res) => {
     // check for password correctness
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword)
-    return res.status(400).json({ error: "Password is wrong" });
-    res.json({
-      error: null,
+     return res.status(400).json({ error: "Password is wrong" });
+
+    //create JWT
+    const token = jwt.sign(
+      {
+        name:user.name,
+        id:user.id,
+      },
+      process.env.TOKEN_SECRET
+    );
+
+    res.header("auth-token",token).json({
+      error:null,
       data: {
-        message: "Login successful",
+        token,
       },
     });
+    // res.json({
+    //   error: null,
+    //   data: {
+    //     message: "Login successful",
+    //   },
+    // });
   });
 
 module.exports = router;
