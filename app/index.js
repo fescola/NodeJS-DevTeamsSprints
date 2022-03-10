@@ -6,6 +6,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const routes = require('./routes/routes')
 dotenv.config();
 const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard")
@@ -15,8 +16,9 @@ app.use(express.json());
 
 // route middlewares
 app.use("/api/user", authRoutes);
-
 app.use("/api/dashboard",verifyToken,dashboardRoutes)
+
+app.use('/',routes)
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
