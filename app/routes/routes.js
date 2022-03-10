@@ -3,6 +3,7 @@ var router = express.Router();
 const controller = require('../controller/controller');
 
 
+
 router.get('/',controller.test)
 router.post('/room',controller.createRoom)
 // :name -> name of the room

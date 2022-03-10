@@ -28,7 +28,6 @@ server.listen(3000, () => {
     console.log('listening on *:3000');
   });
 
-  
 mongoose.connect(
     process.env.DB_CONNECT,
     {
@@ -51,7 +50,6 @@ io.on('connection', (socket) => {
      console.log('message: ' + msg);
     });
   });
-  // ^ VERY IMPORTANT CODE ^ 
 
   io.on('connection', (socket) => {
     socket.broadcast.emit('hi');
@@ -62,4 +60,3 @@ io.on('connection', (socket) => {
       io.emit('chat message', msg);
     });
   });
-  
