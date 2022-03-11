@@ -3,13 +3,23 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const multer  = require('multer');
 const cors = require('cors')
+const path = require('path')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'uploads')
     }
 });
-const upload = multer({ storage: storage });
+const upload = multer({ 
+    storage: storage ,
+    fileFilter: function (req, file, callback) {
+        var ext = path.extname(file.originalname);
+        if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif') {
+            return callback(new Error('Only images are allowed'))
+        }
+        callback(null, true)
+    }
+});
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
@@ -19,31 +29,37 @@ const { json } = require('body-parser');
 
 //Get per aconseguir la URL (http://localhost:3000/user)
 router.get('/user', function (req, res) {
-    let jsonSend ={}
     let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    User.findById('6203a1ca69ac23b74ba3ab27', function (err, users) {
-        if (err) return res.status(500).send("There was a problem finding the users.");
-        jsonSend = users;
-        jsonSend.url = fullUrl;
-        res.status(200).send(jsonSend);
-    });
+    let jsonSend ={
+        "nom":"ferran",
+        "edat": 27,
+        "URL": fullUrl
+    }
+    console.log(jsonSend)
+    res.status(200).send(jsonSend);
 });
 
 //Post per pujar un arxiu
-router.post('/upload', upload.single('image'),function(req,res,next){
-    console.log(req.file)
-    if(!req.file) {
-        res.send({
-            status: false,
-            message: 'No file uploaded'
-        });
-    } else {
-        res.send({
-            status: true,
-            message: 'File is uploaded',
-        });
+router.post('/upload',upload.single('image'),function(req,res,next){
+    try{
+        if(!req.file) {
+            res.send({
+                status: false,
+                message: 'No file uploaded'
+            });
+        }
+        else {
+            res.send({
+                status: true,
+                message: 'File is uploaded',
+            });
+        }
+    }
+    catch(e){
+        res.json(e)
     }
 });
+
 
 //Nivell 2, config de CORS i post /time
 const cacheMW = (req,res,next) =>{
@@ -64,7 +80,7 @@ router.post('/time',cors(),cacheMW,authMW,function(req,res,next){
         user,
         date: new Date().toLocaleString()
     }
-    res.status(200).send({dateNow})
+    res.status(200).send(dateNow)
 })
 
 module.exports = router;

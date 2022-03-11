@@ -1,4 +1,4 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://admin:ZPXOO6AFYxod5N1W@cluster0.q9jn7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
+mongoose.connect('mongodb://localhost:27017/RESTapi?serverSelectionTimeoutMS=5000');
 
 //ZPXOO6AFYxod5N1W

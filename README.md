@@ -1,6 +1,9 @@
+# Inici de l'app
 
-Iniciar amb l'app.js
+> npm start
 
-endpoints nivell 1 : /user i /upload
+# Endpoints
 
-endpoints nivell 2/3 : /time
+Nivell 1 : get- /user i post- /upload
+
+Nivell 2/3 : post - /time
