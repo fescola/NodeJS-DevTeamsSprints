@@ -11,7 +11,10 @@ dotenv.config();
 const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard")
 const verifyToken = require("./routes/validate-token")
+const controller = require("./controller/controller")
+var cors = require('cors')
 
+app.use(cors())
 app.use(express.json()); 
 
 // route middlewares
@@ -20,9 +23,9 @@ app.use("/api/dashboard",verifyToken,dashboardRoutes)
 
 app.use('/',routes)
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-});
+// app.get('/', (req, res) => {
+//   res.sendFile(__dirname + '/index.html');
+// });
 
 server.listen(3000, () => {
     console.log('listening on *:3000');
@@ -58,5 +61,18 @@ io.on('connection', (socket) => {
   io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
       io.emit('chat message', msg);
+      let data = {
+        msg: msg
+      }
+      controller.saveMsg(data)
     });
   });
+
+  // users = [];
+  // io.on('connection', function(socket){
+  //    console.log('A user connected');
+  //    socket.on('setUsername', function(data){
+  //          users.push(data);
+  //          socket.emit('userSet', {username: data});
+  //    })
+  // });

@@ -1,9 +1,14 @@
+const res = require('express/lib/response')
 const Room = require('../models/Room')
 const User = require('../models/User')
 
 
 const test = async (req, res) => {
     res.send('test')
+}
+const html = async(req,res)=>{
+    res.json({msg: 'hey'})
+    //res.sendFile(process.cwd() + '/app/index.html');
 }
 const createRoom = async (req, res) => {
     const room = new Room({
@@ -34,8 +39,13 @@ const addUser = async (req, res) => {
         res.status(400).json({ error });
     }
 }
-const saveMsg = async(req,res)=>{
-
+const saveMsg = async(data)=>{
+    try{
+    await Room.findOne({name:"testing"}).updateOne({$push:{messages:data}})
+    }
+    catch(error){
+        res.json({error})
+    }
 }
 const deleteUserFromRoom = async(req,res)=>{
     const user = await User.findOne({ name: req.body.name })
@@ -55,7 +65,9 @@ const deleteUserFromRoom = async(req,res)=>{
 }
 module.exports = {
     test,
+    html,
     createRoom,
     addUser,
+    saveMsg,
     deleteUserFromRoom
 };
