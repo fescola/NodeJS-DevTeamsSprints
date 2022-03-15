@@ -7,8 +7,7 @@ const test = async (req, res) => {
     res.send('test')
 }
 const html = async(req,res)=>{
-    res.json({msg: 'hey'})
-    //res.sendFile(process.cwd() + '/app/index.html');
+    res.sendFile(process.cwd() + '/app/index.html');
 }
 const createRoom = async (req, res) => {
     const room = new Room({

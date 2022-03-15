@@ -7,7 +7,7 @@ const io = new Server(server);
 const fetch =require("node-fetch");
 const port = process.env.PORT || 3001;
 
-socket io clint
+//socket io client
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/chat.html');

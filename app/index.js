@@ -3,7 +3,11 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const io = new Server(server);
+const io = new Server(server,{
+  cors: {
+    origin: "https://localhost:3001"
+  }
+});
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const routes = require('./routes/routes')
@@ -16,6 +20,7 @@ var cors = require('cors')
 
 app.use(cors())
 app.use(express.json()); 
+
 
 // route middlewares
 app.use("/api/user", authRoutes);
