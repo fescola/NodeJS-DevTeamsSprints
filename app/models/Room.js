@@ -13,8 +13,18 @@ const roomSchema = new mongoose.Schema({
     type: Object
   },
   messages:{
-      type: [Object],
-      default: undefined
+      type: Object,
+      default: undefined,
+      msg:{
+        type:String
+      },
+      user:{
+        nom:String,
+      },
+      date: {
+        type: Date,
+        default: Date.now,
+      }
   }
 });
 

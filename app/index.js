@@ -66,8 +66,10 @@ io.on('connection', (socket) => {
   io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
       io.emit('chat message', msg);
+      let time = new Date();
       let data = {
-        msg: msg
+        msg: msg,
+        date: time.toLocaleString()
       }
       controller.saveMsg(data)
     });
