@@ -4,7 +4,7 @@ const User = require('../models/User')
 
 
 const test = async (req, res) => {
-    res.send('test')
+    res.json(req.body)
 }
 const html = async(req,res)=>{
     res.sendFile(process.cwd() + '/app/index.html');
