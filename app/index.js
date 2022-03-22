@@ -21,16 +21,15 @@ var cors = require('cors')
 app.use(cors())
 app.use(express.json());
 
-
 // route middlewares
 app.use("/api/user", authRoutes);
+//sending a GET here with our header "auth-token" set to a JWT will get us access
 app.use("/api/dashboard", verifyToken, dashboardRoutes)
 
 app.use('/', routes)
-
-// app.get('/', (req, res) => {
-//   res.sendFile(__dirname + '/index.html');
-// });
+    // app.get('/', (req, res) => {
+    //   res.sendFile(__dirname + '/index.html');
+    // });
 
 server.listen(3000, () => {
     console.log('listening on *:3000');
@@ -54,7 +53,8 @@ io.on('connection', (socket) => {
 // this
 io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
-        console.log('message: ' + msg);
+        console.log("sending msg from " + socket.id + ": " + msg);
+        //console.log('message: ' + msg);
     });
 });
 
@@ -74,10 +74,11 @@ io.on('connection', (socket) => {
     });
 });
 //room creation server side test
+//TODO 
 io.sockets.on('connection', function(socket) {
-    socket.on('create', function(room) {
+    socket.on('connectRoom', function(room) {
         socket.join(room);
-        console.log(`joined room: ${socket.rooms}`)
+        console.log(`${socket.id} joined room: ${socket.rooms}`)
     });
 });
 

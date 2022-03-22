@@ -7,24 +7,26 @@ const io = new Server(server);
 
 //SOCKET STUFF 
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log('user connected');
     socket.on('disconnect', () => {
-      console.log('user disconnected');
+        console.log('user disconnected');
     });
-  });
+});
 // this
 io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
-     console.log('message: ' + msg);
+        console.log('message: ' + msg);
     });
-  });
+});
 
-  io.on('connection', (socket) => {
+io.on('connection', (socket) => {
     socket.broadcast.emit('hi');
-  });
+});
 
-  io.on('connection', (socket) => {
+io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
-      io.emit('chat message', msg);
+        io.emit('chat message', msg);
     });
-  });
+});
+
+module.exports = io;
