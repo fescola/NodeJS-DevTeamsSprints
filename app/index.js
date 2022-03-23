@@ -8,6 +8,8 @@ const io = new Server(server, {
         origin: "*"
     }
 });
+const Room = require('./models/Room')
+const User = require('./models/User')
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const routes = require('./routes/routes')
@@ -50,21 +52,10 @@ io.on('connection', (socket) => {
         console.log('user disconnected');
     });
 });
-// this
-io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-        console.log("sending msg from " + socket.id + ": " + msg);
-        //console.log('message: ' + msg);
-    });
-});
 
 io.on('connection', (socket) => {
-    socket.broadcast.emit('hi');
-});
-
-io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-        io.emit('chat message', msg);
+    socket.on('chat message', (msg, id) => {
+        io.emit('chat message', msg, id);
         let time = new Date();
         let data = {
             msg: msg,
@@ -76,13 +67,36 @@ io.on('connection', (socket) => {
 //room creation server side test
 //TODO 
 io.sockets.on('connection', function(socket) {
-    socket.on('connectRoom', function(room) {
-        socket.join(room);
-        console.log(`${socket.id} joined room: ${socket.rooms}`)
+    socket.on('connectRoom', async function(data) {
+        //socket.join(room);
+        let searchRoom = await Room.findOne({ name: data })
+        try {
+            if (searchRoom) {
+                socket.join(searchRoom.id)
+                io.to(searchRoom.id).emit('message', `user: ${socket.id} has joined`);
+                console.log(`${socket.id} joined room: ${searchRoom.name} with id: ${searchRoom.id}`)
+            }
+        } catch (e) { console.log(e) };
+
     });
 });
-
-
+io.sockets.on('connection', function(socket) {
+    socket.on('createRoom', async function(data) {
+        console.log(`this is data: ${data}`);
+        try {
+            let room = new Room({
+                name: data
+            });
+            if (room.name = await Room.findOne({ name: data })) {
+                return console.log('room already exists')
+            }
+            await room.save(); //TODO rooms are not getting saved
+            console.log(`new room saved: ${room.name}`)
+        } catch (error) {
+            console.log(error)
+        }
+    });
+});
 // users = [];
 // io.on('connection', function(socket){
 //    console.log('A user connected');

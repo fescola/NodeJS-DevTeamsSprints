@@ -59,11 +59,17 @@ const deleteUserFromRoom = async(req, res) => {
         res.status(400).json({ error });
     }
 }
+const getRooms = async(req, res) => {
+    let rooms = await Room.find({})
+    res.json(rooms)
+}
+
 module.exports = {
     test,
     html,
     createRoom,
     addUser,
     saveMsg,
-    deleteUserFromRoom
+    deleteUserFromRoom,
+    getRooms
 };
