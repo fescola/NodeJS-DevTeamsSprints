@@ -51,18 +51,19 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('user disconnected');
     });
-});
 
-io.on('connection', (socket) => {
-    socket.on('chat message', (msg, id) => {
-        io.emit('chat message', msg, id);
-        let time = new Date();
-        let data = {
-            msg: msg,
-            date: time.toLocaleString()
-        }
-        controller.saveMsg(data)
-    });
+    // socket.on('chat message', (msg, id) => {
+    //     io.emit('chat message', msg, id);
+    //     let time = new Date();
+    //     let data = {
+    //         msg: msg,
+    //         date: time.toLocaleString()
+    //     }
+    //     controller.saveMsg(data)
+    // });
+    socket.on('disconnectAll', () => {
+
+    })
 });
 //room creation server side test
 //TODO 
@@ -72,22 +73,31 @@ io.sockets.on('connection', function(socket) {
         let searchRoom = await Room.findOne({ name: data })
         try {
             if (searchRoom) {
-                socket.join(searchRoom.id)
-                io.to(searchRoom.id).emit('message', `user: ${socket.id} has joined`);
-                console.log(`${socket.id} joined room: ${searchRoom.name} with id: ${searchRoom.id}`)
+                socket.join(data)
+                socket.broadcast.to(data).emit("room connection", `${socket.id} connected`)
+                    //io.to(searchRoom.id).emit('message', `user: ${socket.id} has joined`);
+                console.log(`${socket.id} joined room: ${data}`)
             }
         } catch (e) { console.log(e) };
-
     });
+    socket.on('disconnectAll', () => {
+        let data = io.sockets.adapter.rooms
+        console.log(data)
+            //socket.leave()
+    })
+    socket.on('chat message', (msg, id) => {
+        //io.sockets.in('testing').emit('chat message', msg, id)
+        io.to('testing').emit('chat message', msg)
+    })
+
 });
 io.sockets.on('connection', function(socket) {
     socket.on('createRoom', async function(data) {
-        console.log(`this is data: ${data}`);
         try {
             let room = new Room({
                 name: data
             });
-            if (room.name = await Room.findOne({ name: data })) {
+            if (room.name == await Room.findOne({ name: data })) {
                 return console.log('room already exists')
             }
             await room.save(); //TODO rooms are not getting saved

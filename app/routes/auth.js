@@ -64,9 +64,9 @@ router.post("/login", async(req, res) => {
         },
         process.env.TOKEN_SECRET
     );
-
     res.header("auth-token", token).json({
-        jwt: token
+        jwt: token,
+        email: req.body.email
     });
     // res.json({
     //   error: null,

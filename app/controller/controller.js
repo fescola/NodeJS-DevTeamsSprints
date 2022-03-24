@@ -63,6 +63,10 @@ const getRooms = async(req, res) => {
     let rooms = await Room.find({})
     res.json(rooms)
 }
+const loged = async(req, res) => {
+    const user = await User.findOne({ email: req.body.email });
+    res.json(user.name)
+}
 
 module.exports = {
     test,
@@ -71,5 +75,6 @@ module.exports = {
     addUser,
     saveMsg,
     deleteUserFromRoom,
-    getRooms
+    getRooms,
+    loged
 };
