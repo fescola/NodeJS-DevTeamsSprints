@@ -11,12 +11,11 @@ const html = async(req, res) => {
 }
 const createRoom = async(req, res) => {
     const room = new Room({
-        name: req.body.name,
-        users: req.body.users
+        name: req.body.name
     });
     try {
         const savedRoom = await room.save();
-        console.log(`new user saved: ${savedRoom}`)
+        console.log(`new room saved: ${savedRoom}`)
         res.json({ error: null, data: savedRoom });
     } catch (error) {
         res.status(400).json({ error });

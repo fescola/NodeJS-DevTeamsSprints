@@ -13,7 +13,6 @@ router.get('/rooms', controller.getRooms)
 router.post('/:name/addUser', controller.addUser)
 router.delete('/:name/deleteUser', controller.deleteUserFromRoom)
 router.post('/login', verifyToken, controller.loged)
-    //router.post('/',controller.test)
     //router.put('/',controller.a)
     //router.delete(`/`,controller.a)
 
