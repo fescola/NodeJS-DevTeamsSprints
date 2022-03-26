@@ -64,6 +64,9 @@ io.on('connection', (socket) => {
     socket.on('disconnectAll', () => {
 
     })
+    socket.on('addRoom', () => {
+        socket.emit('refreshRooms')
+    })
 });
 //room creation server side test
 //TODO 
@@ -91,22 +94,7 @@ io.sockets.on('connection', function(socket) {
     })
 
 });
-io.sockets.on('connection', function(socket) {
-    socket.on('createRoom', async function(data) {
-        try {
-            let room = new Room({
-                name: data
-            });
-            if (room.name == await Room.findOne({ name: data })) {
-                return console.log('room already exists')
-            }
-            await room.save(); //TODO rooms are not getting saved
-            console.log(`new room saved: ${room.name}`)
-        } catch (error) {
-            console.log(error)
-        }
-    });
-});
+
 // users = [];
 // io.on('connection', function(socket){
 //    console.log('A user connected');
