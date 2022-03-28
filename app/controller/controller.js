@@ -37,9 +37,10 @@ const addUser = async(req, res) => {
         res.status(400).json({ error });
     }
 }
-const saveMsg = async(data) => {
+const saveMsg = async(room, data) => {
     try {
-        await Room.findOne({ name: "testing" }).updateOne({ $push: { messages: data } })
+        console.log(room)
+        await Room.findOne({ id: room }).updateOne({ $push: { messages: data } })
     } catch (error) {
         res.json({ error })
     }
@@ -62,6 +63,17 @@ const getRooms = async(req, res) => {
     let rooms = await Room.find({})
     res.json(rooms)
 }
+const getRoomData = async(req, res) => {
+    try {
+        let room = await Room.find({ name: req.params.name })
+        if (!room) {
+            res.status(400).json({ message: 'room doesnt exist' })
+        }
+        res.status(200).json(room)
+    } catch (error) {
+        res.status(400).json({ error })
+    }
+}
 const loged = async(req, res) => {
     const user = await User.findOne({ email: req.body.email });
     res.json(user.name)
@@ -75,5 +87,6 @@ module.exports = {
     saveMsg,
     deleteUserFromRoom,
     getRooms,
-    loged
+    loged,
+    getRoomData
 };

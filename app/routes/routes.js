@@ -9,6 +9,7 @@ router.get('/', controller.html)
 router.post('/test', controller.test)
 router.post('/room', controller.createRoom)
 router.get('/rooms', controller.getRooms)
+router.get('/rooms/:name', controller.getRoomData)
     // :name -> name of the room
 router.post('/:name/addUser', controller.addUser)
 router.delete('/:name/deleteUser', controller.deleteUserFromRoom)

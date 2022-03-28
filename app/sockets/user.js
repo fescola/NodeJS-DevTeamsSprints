@@ -1,11 +1,9 @@
 class User {
     constructor(data) {
         this.name = data.name
-        this.email = data.email
-        this.socketid = socketid
-    }
-    connectRoom(id) {
-
+        this.socketid = data.id
     }
 }
 //TODO
+
+module.exports = User;
