@@ -40,7 +40,7 @@ const addUser = async(req, res) => {
 const saveMsg = async(room, data) => {
     try {
         console.log(room)
-        await Room.findOne({ id: room }).updateOne({ $push: { messages: data } })
+        await Room.findOne({ name: room }).updateOne({ $push: { messages: data } })
     } catch (error) {
         res.json({ error })
     }
