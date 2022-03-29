@@ -3,9 +3,7 @@ const Room = require('../models/Room')
 const User = require('../models/User')
 
 
-const test = async(req, res) => {
-    res.status(200).json(req.body)
-}
+
 const html = async(req, res) => {
     res.sendFile(process.cwd() + '/app/index.html');
 }
@@ -76,11 +74,10 @@ const getRoomData = async(req, res) => {
 }
 const loged = async(req, res) => {
     const user = await User.findOne({ email: req.body.email });
-    res.json(user.name)
+    res.status(200).json({ user: user.name, login: true })
 }
 
 module.exports = {
-    test,
     html,
     createRoom,
     addUser,

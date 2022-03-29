@@ -6,7 +6,6 @@ const verifyToken = require('./validate-token');
 
 
 router.get('/', controller.html)
-router.post('/test', controller.test)
 router.post('/room', controller.createRoom)
 router.get('/rooms', controller.getRooms)
 router.get('/rooms/:name', controller.getRoomData)
@@ -14,7 +13,5 @@ router.get('/rooms/:name', controller.getRoomData)
 router.post('/:name/addUser', controller.addUser)
 router.delete('/:name/deleteUser', controller.deleteUserFromRoom)
 router.post('/login', verifyToken, controller.loged)
-    //router.put('/',controller.a)
-    //router.delete(`/`,controller.a)
 
 module.exports = router;

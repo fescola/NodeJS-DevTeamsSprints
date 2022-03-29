@@ -1,46 +1,51 @@
 const controller = require('../controller/controller')
 const Room = require('../models/Room')
-let User = require('../sockets/user')
 let users = []
 
 function socket(io) {
-    //SOCKET STUFF 
     io.on('connection', (socket) => {
-        console.log('a user connected');
         socket.on('disconnect', () => {
             console.log('user disconnected');
         });
     });
-    //room creation server side test
-    //TODO 
+
     io.sockets.on('connection', function(socket) {
         socket.on('userConnected', (name) => {
-            if (typeof name === 'string') {
-                //TODO this can get a object object that we dont wanna save or accept, only string
-                console.log(name)
-                let data = {
-                    name: name,
-                    id: socket.id
-                }
-                let user = new User(data)
-                users.push(user)
-                console.log(users)
-            } else console.log('no user')
-        })
-        socket.on('connectRoom', async function(data) {
-            let searchRoom = await Room.findOne({ name: data })
+                if (typeof name === 'string') {
+                    //TODO this can get a object object that we dont wanna save or accept, only string
+                    let data = {
+                        name: name,
+                        id: socket.id
+                    }
+                    for (let i = 0; i < users.length; i++) {
+                        if (users[i].name === name) users.splice(i, 1)
+                    }
+                    users.push(data)
+                    console.log(users)
+                } else console.log('no user')
+            })
+            //room creation server side test
+        socket.on('connectRoom', async function(room, user) {
+            let searchRoom = await Room.findOne({ name: room })
             let [, oldRoom] = socket.rooms
-            console.log(oldRoom)
             try {
                 if (searchRoom) {
                     if (socket.rooms.size > 1) {
                         socket.leave(oldRoom)
                         console.log(`leaving ${oldRoom}`)
                     }
-                    socket.join(data)
-                    socket.broadcast.to(data).emit("room connection", `${socket.id} connected`)
+                    socket.join(room)
+                    let roomUsers = io.sockets.adapter.rooms.get(room)
+                    let arr = []
+                    if (roomUsers != undefined) {
+                        arr = [...roomUsers];
+                    }
+                    for (let i = 0; i < arr.length; i++) {
+                        arr[i] = (users.find(u => u.id === arr[i])).name
+                    }
+                    io.to(room).emit("room connection", `${socket.id} connected`, arr)
                         //io.to(searchRoom.id).emit('message', `user: ${socket.id} has joined`);
-                    console.log(`${socket.id} joined room: ${data}`)
+                    console.log(`${user} joined room: ${room}`)
                 }
             } catch (e) { console.log(e) };
         });
@@ -59,13 +64,5 @@ function socket(io) {
         })
     });
 }
-// users = [];
-// io.on('connection', function(socket){
-//    console.log('A user connected');
-//    socket.on('setUsername', function(data){
-//          users.push(data);
-//          socket.emit('userSet', {username: data});
-//    })
-// });
 
 module.exports = socket;
