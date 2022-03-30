@@ -9,3 +9,5 @@ https://www.developerro.com/2019/03/12/jwt-api-authentication/
 REACT: https://youtu.be/NU-HfZY3ATQ
 
 SOCKET USERS https://learntutorials.net/es/socket-io/topic/9837/manejo-de-usuarios-con-socket-io
+
+GOOGLE AUTH https://medium.com/@jackrobertscott/how-to-use-google-auth-api-with-node-js-888304f7e3a0

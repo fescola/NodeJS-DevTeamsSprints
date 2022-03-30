@@ -1,11 +1,15 @@
 const res = require('express/lib/response')
 const Room = require('../models/Room')
 const User = require('../models/User')
+const url = require('../google-auth/google-utils')
 
 
+const html = async(req, res) => {}
+const google = async(req, res) => {
+    res.status(200).json({ URL: url })
+}
+const googleAuth = async() => {
 
-const html = async(req, res) => {
-    res.sendFile(process.cwd() + '/app/index.html');
 }
 const createRoom = async(req, res) => {
     const room = new Room({
@@ -77,6 +81,7 @@ const loged = async(req, res) => {
     res.status(200).json({ user: user.name, login: true })
 }
 
+
 module.exports = {
     html,
     createRoom,
@@ -85,5 +90,7 @@ module.exports = {
     deleteUserFromRoom,
     getRooms,
     loged,
-    getRoomData
+    getRoomData,
+    google,
+    googleAuth
 };

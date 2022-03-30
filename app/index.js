@@ -16,7 +16,8 @@ dotenv.config();
 const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard")
 const verifyToken = require("./routes/validate-token")
-var cors = require('cors')
+const cors = require('cors')
+const googleAPI = require('./google-auth/google-utils')
 
 app.use(cors())
 app.use(express.json());

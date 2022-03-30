@@ -5,7 +5,7 @@ let users = []
 function socket(io) {
     io.on('connection', (socket) => {
         socket.on('disconnect', () => {
-            console.log('user disconnected');
+            console.log(socket.id + ' user disconnected');
         });
     });
 
@@ -18,7 +18,10 @@ function socket(io) {
                         id: socket.id
                     }
                     for (let i = 0; i < users.length; i++) {
-                        if (users[i].name === name) users.splice(i, 1)
+                        if (users[i].name === name) {
+                            io.to(users[i].id).emit('disconnectOldUser');
+                            users.splice(i, 1)
+                        }
                     }
                     users.push(data)
                     console.log(users)
@@ -36,12 +39,15 @@ function socket(io) {
                     }
                     socket.join(room)
                     let roomUsers = io.sockets.adapter.rooms.get(room)
+                    console.log(roomUsers);
                     let arr = []
                     if (roomUsers != undefined) {
                         arr = [...roomUsers];
                     }
                     for (let i = 0; i < arr.length; i++) {
-                        arr[i] = (users.find(u => u.id === arr[i])).name
+                        console.log(arr[i]);
+                        let found = users.find(u => u.id === arr[i])
+                        arr[i] = found.name
                     }
                     io.to(room).emit("room connection", `${socket.id} connected`, arr)
                         //io.to(searchRoom.id).emit('message', `user: ${socket.id} has joined`);
