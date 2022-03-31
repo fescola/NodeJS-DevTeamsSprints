@@ -1,15 +1,18 @@
 const res = require('express/lib/response')
 const Room = require('../models/Room')
 const User = require('../models/User')
-const url = require('../google-auth/google-utils')
+const google = require('../google-auth/google-utils')
 
 
 const html = async(req, res) => {}
-const google = async(req, res) => {
-    res.status(200).json({ URL: url })
+const googleURL = async(req, res) => {
+    res.status(200).json({ URL: google.url })
 }
-const googleAuth = async() => {
-
+const googleAuth = async(req, res) => {
+    //let acc = await google.getGoogleAccountFromCode()
+    let code = google.getGoogleAccountFromCode(req.body.url)
+    console.log(code);
+    res.status(200).send(req.body)
 }
 const createRoom = async(req, res) => {
     const room = new Room({
@@ -91,6 +94,6 @@ module.exports = {
     getRooms,
     loged,
     getRoomData,
-    google,
+    googleURL,
     googleAuth
 };

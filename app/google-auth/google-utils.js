@@ -5,7 +5,7 @@ const { google } = require('googleapis')
 const googleConfig = {
     clientId: '453332737772-gs4h8l11h5aepvrp18l2a46a4qr2nd2p.apps.googleusercontent.com', // e.g. asdfghjkljhgfdsghjk.apps.googleusercontent.com
     clientSecret: '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', // e.g. _ASDFA%DFASDFASDFASD#FAD-
-    redirect: 'http://localhost:3000/google-auth' // this must match your google api settings
+    redirect: 'http://127.0.0.1:5500/test/index.html' // this must match your google api settings
 };
 
 /**
@@ -48,4 +48,49 @@ function urlGoogle() {
 }
 const url = urlGoogle()
 
-module.exports = url
+/**
+ * Helper function to get the library with access to the google plus api.
+ */
+function getGooglePlusApi(auth) {
+    return google.plus({ version: 'v1', auth });
+}
+
+/**
+ * Extract the email and id of the google account from the "code" parameter.
+ */
+async function getGoogleAccountFromCode(code) {
+    const [first, ...rest] = code.split('=');
+    const remainder = rest.join('=');
+    console.log('this is code-' + remainder); // 👉️ again-later
+    code = remainder
+    console.log(code);
+    const auth = createConnection();
+    // get the auth "tokens" from the request
+    const data = await auth.getToken(code);
+    auth.setCredentials(tokens);
+    const tokens = data.tokens;
+
+    // add the tokens to the google api so we have access to the account
+
+
+
+    // connect to google plus - need this to get the user's email
+    const plus = getGooglePlusApi(auth);
+    const me = await plus.people.get({ userId: 'me' });
+
+    // get the google id and email
+    const userGoogleId = me.data.id;
+    const userGoogleEmail = me.data.emails && me.data.emails.length && me.data.emails[0].value;
+
+    // return so we can login or sign up the user
+    return {
+        id: userGoogleId,
+        email: userGoogleEmail,
+        tokens: tokens, // you can save these to the user if you ever want to get their details without making them log in again
+    };
+}
+
+module.exports = {
+    url,
+    getGoogleAccountFromCode
+}

@@ -1,5 +1,6 @@
 const controller = require('../controller/controller')
 const Room = require('../models/Room')
+const google = require('../google-auth/google-utils')
 let users = []
 
 function socket(io) {
@@ -50,6 +51,7 @@ function socket(io) {
                         arr[i] = found.name
                     }
                     io.to(room).emit("room connection", `${socket.id} connected`, arr)
+                    io.to(socket).emit('testingRoomUserData')
                         //io.to(searchRoom.id).emit('message', `user: ${socket.id} has joined`);
                     console.log(`${user} joined room: ${room}`)
                 }
