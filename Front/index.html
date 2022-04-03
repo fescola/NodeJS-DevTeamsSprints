@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="./assets/style.css">
+
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper center-align">
+            <a href="" class="brand-logo" id="title">Chat</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+            </ul>
+        </div>
+    </nav>
+    <div class="contenedorMainPage">
+        <div class="row">
+            <div class="col s3 l3 offset-s0 side-bars">
+                <div class="card horizontal z-depth-2">
+                    <div class="card-stacked">
+
+                        <div id="addRoom" class="rooms card-content">
+                            <div>
+                                <form id="roomForm" action="">
+                                    <input id="roomInput" autocomplete="off" placeholder="New Room" /><button class="waves-effect waves-light btn-small" id="addRoomBtn" type="submit">Add Room</button>
+                                </form>
+                                <div class="card-content">
+                                    <p>Rooms.</p>
+                                </div>
+                                <ul id="rooms"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 l6 offset-s0">
+                <div class="chat">
+                    <div class="chatbox">
+                        <ul id="messages"></ul>
+                        <form id="form" action="" class="center-align">
+                            <button type="button" id="emoji-button">🤡</button>
+                            <input id="input" autocomplete="off" /><button class="waves-effect waves-light btn-small ">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col s3 l3 offset-s0 side-bars">
+                <div class="card horizontal z-depth-2">
+                    <div class="card-stacked">
+                        <div class="card-content">
+                            <p>Users</p>
+                        </div>
+                        <div id="usersDiv" class="rooms card-content">
+                            <div>
+                                <ul id="users"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="page-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">ITAcademy Chat</h5>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                <a class="grey-text text-lighten-4 right" href="http://github.com/fescola">My github c:</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- This is the login screen -->
+
+    <div class="backgroundLogin" id="backgroundLogin"></div>
+    <div id="logreg">
+        <div class="contenedorLogin" id="contenedorLogin">
+            <div class="row">
+                <div class="col s12 m6 offset-m4">
+                    <div class="container">
+                        <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+                            <form id="loginForm" class="col s12">
+                                <div class='row'>
+                                    <a id='googleLogin' href="">Login with Google</a>
+                                    <div class='col s12'>
+                                        <h5 id="login">Login</h5>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input type='text' name='email' id='email' />
+                                        <label for='email'>Enter your email</label>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input type='password' name='password' id='password' />
+                                        <label for='password'>Enter your password</label>
+                                    </div>
+                                    <label style='float: right;'>
+                                    <a class='pink-text' href='#!' id="registerBtn"><b>Register</b></a>
+                                </label>
+                                </div>
+                                <br/>
+                                <center>
+                                    <div class='row'>
+                                        <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
+                                    </div>
+                                </center>
+                            </form>
+                        </div>
+                    </div>
+                    </center>
+                </div>
+            </div>
+        </div>
+        <div class="contenedorRegister" id="contenedorRegister">
+            <div class="row">
+                <div class="col s12 m6 offset-m4">
+                    <div class="container">
+                        <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+                            <form id="registerForm" class="col s12">
+                                <div class='row'>
+                                    <div class='col s12'>
+                                        <h5 id="login">Register</h5>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input type='text' name='username' id='username' />
+                                        <label for='email'>Enter your username</label>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input type='text' name='email' id='registeremail' />
+                                        <label for='email'>Enter your email</label>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input type='password' name='password' id='registerpassword' />
+                                        <label for='password'>Enter your password</label>
+                                    </div>
+                                    <label style='float: right;'>
+                                    <a class='pink-text' href='#!' id="loginBtn"><b>Login</b></a>
+                                </label>
+                                </div>
+                                <br/>
+                                <center>
+                                    <div class='row'>
+                                        <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
+                                    </div>
+                                </center>
+                            </form>
+                        </div>
+                    </div>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
+    <script>
+        const button = document.querySelector('#emoji-button');
+        const picker = new EmojiButton();
+        button.addEventListener('click', (event) => {
+            event.preventDefault()
+            picker.togglePicker(button);
+        });
+        picker.on('emoji', emoji => {
+            document.getElementById('input').value += emoji;
+        });
+    </script>
+    <script src=" http://localhost:3000/socket.io/socket.io.js "></script>
+    <script src="./login.js "></script>
+    <!--<script src="./script.js "></script>-->
+</body>
+
+</html>

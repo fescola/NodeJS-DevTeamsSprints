@@ -6,8 +6,6 @@ const verifyToken = require('./validate-token');
 
 
 router.get('/', controller.html)
-router.get('/google', controller.googleURL)
-router.post('/google-auth', controller.googleAuth)
 router.post('/room', controller.createRoom)
 router.get('/rooms', controller.getRooms)
 router.get('/rooms/:name', controller.getRoomData)

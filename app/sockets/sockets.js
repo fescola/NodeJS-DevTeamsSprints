@@ -1,6 +1,5 @@
 const controller = require('../controller/controller')
 const Room = require('../models/Room')
-const google = require('../google-auth/google-utils')
 let users = []
 
 function socket(io) {
