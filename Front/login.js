@@ -7,17 +7,21 @@
     let googleURL = 'http://localhost:3000/google'
     let registerBtn = document.getElementById('registerBtn')
     let loginBtn = document.getElementById('loginBtn')
-        //registerForm.style.display = 'none';
     let user = localStorage.getItem('username')
+    let logout = document.getElementById('logout')
+
     registerBtn.addEventListener('click', function(e) {
         loginContainer.style.display = 'none'
-        showRegister()
+        registerContainer.style.display = "block";
     })
     loginBtn.addEventListener('click', function(e) {
-        hideRegister()
-        showLogin()
+        registerContainer.style.display = "none";
+        loginContainer.style.display = "block";
     })
-
+    logout.addEventListener('click', function(e) {
+        localStorage.removeItem('username')
+        window.location.reload();
+    })
     registerForm.addEventListener('submit', function(e) {
         e.preventDefault();
         let data = {
@@ -27,8 +31,10 @@
         }
         postData(registerURL, data)
             .then(req => {
-                console.log(req); // JSON data parsed by `data.json()` call
-                hideLoginRegister()
+                console.log(req);
+                alert('Register completed')
+                window.location.reload();
+                //hideLoginRegister()
             })
             .catch(e => console.log(e))
     });
@@ -45,7 +51,7 @@
                 //get JWT back and send it as header for a get request
                 data.jwt = req.jwt
                 postLogin(JWTURL, data)
-                    .then(req => { //localStorage.setItem('username', 'anonimous')
+                    .then(req => {
                         if (req.login === true) {
                             localStorage.setItem('username', req.user)
                             hideLoginRegister()
@@ -57,8 +63,6 @@
                             data.name = ''
                             data.password = ''
                         }
-                        //TODO fix this properly and check local storage for logged users
-                        //userJoin(data)
                     })
             })
             .catch(e => console.log(e))
@@ -104,24 +108,10 @@
     }
 
     hideLoginRegister = () => {
-        if (registerContainer.style.display === "none" || loginbkgrd.style.display === "none" || loginContainer.style.display === "none" || loginbkgrd.style.display === "none") {
-            registerContainer.style.display = "block";
-            loginbkgrd.style.display = "block";
-            loginContainer.style.display = "block";
-        } else {
-            registerContainer.style.display = "none";
-            loginbkgrd.style.display = "none";
-            loginContainer.style.display = "none";
-        }
-    }
-    hideRegister = () => {
         registerContainer.style.display = "none";
-    }
-    showRegister = () => {
-        registerContainer.style.display = "block";
-    }
-    showLogin = () => {
-        loginContainer.style.display = "block";
+        loginbkgrd.style.display = "none";
+        loginContainer.style.display = "none";
+
     }
     if (user) {
         hideLoginRegister()
@@ -151,5 +141,5 @@
         console.log('comeback from google login');
     }
     //googleLogin()
-    hideRegister()
+    registerContainer.style.display = "none";
 })();

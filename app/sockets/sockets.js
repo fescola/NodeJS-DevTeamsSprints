@@ -11,8 +11,8 @@ function socket(io) {
 
     io.sockets.on('connection', function(socket) {
         socket.on('userConnected', (name) => {
+            try {
                 if (typeof name === 'string') {
-                    //TODO this can get a object object that we dont wanna save or accept, only string
                     let data = {
                         name: name,
                         id: socket.id
@@ -26,8 +26,9 @@ function socket(io) {
                     users.push(data)
                     console.log(users)
                 } else console.log('no user')
-            })
-            //room creation server side test
+            } catch (error) { console.log(error); }
+        })
+
         socket.on('connectRoom', async function(room, user) {
             let searchRoom = await Room.findOne({ name: room })
             let [, oldRoom] = socket.rooms
@@ -49,22 +50,23 @@ function socket(io) {
                         let found = users.find(u => u.id === arr[i])
                         arr[i] = found.name
                     }
-                    io.to(room).emit("room connection", `${socket.id} connected`, arr)
-                    io.to(socket).emit('testingRoomUserData')
-                        //io.to(searchRoom.id).emit('message', `user: ${socket.id} has joined`);
+                    io.to(room).emit("room connection", `${user} connected`, arr)
+                        //io.to(socket).emit('testingRoomUserData')
                     console.log(`${user} joined room: ${room}`)
                 }
             } catch (e) { console.log(e) };
         });
         socket.on('chat message', (data) => {
-            console.log(data)
-            let [, room] = socket.rooms
-                //emiting to all sockets in room
-            io.to(room).emit('chat message', data)
-                //save msg to db
-            let time = new Date();
-            data.date = time.toLocaleString()
-            controller.saveMsg(room, data)
+            try {
+                console.log(data)
+                let [, room] = socket.rooms
+                    //emiting to all sockets in room
+                io.to(room).emit('chat message', data)
+                    //save msg to db
+                let time = new Date();
+                data.date = time.toLocaleString()
+                controller.saveMsg(room, data)
+            } catch (error) { console.log(error) }
         })
         socket.on('addRoom', () => {
             io.sockets.emit('refreshRooms')

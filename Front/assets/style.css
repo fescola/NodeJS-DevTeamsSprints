@@ -100,3 +100,10 @@ footer {
     bottom: 50%;
     left: 5%;
 }
+
+#logout {
+    position: relative;
+    padding-left: 10%;
+    margin-left: 20%;
+    background-color: grey;
+}

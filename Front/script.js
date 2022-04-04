@@ -9,7 +9,6 @@
     var roomInput = document.getElementById('roomInput')
     var users = document.getElementById('users')
     var title = document.getElementById('title')
-        //var joinRoom = document.getElementById('')
     let URL = 'http://localhost:3000'
     let user = localStorage.getItem('username')
 
@@ -44,10 +43,8 @@
         item.textContent = `${data.user}: ${data.msg}`;
         messages.appendChild(item);
         messages.scrollTop = messages.scrollHeight;
-        //window.scrollTo(0, document.body.scrollHeight);
     });
     socket.on('room connection', function(msg, roomUsers) {
-        //user = localStorage.getItem('username')
         let item = document.createElement('li');
         item.textContent = `${msg}`;
         messages.appendChild(item);
@@ -71,33 +68,37 @@
         title.textContent = room;
     }
     const getRooms = async() => {
-        allRooms = await getData(`${URL}/rooms`);
-        for (let room of allRooms) {
-            if (printedRooms.includes(room.name)) {
-                continue
+        try {
+            allRooms = await getData(`${URL}/rooms`);
+            for (let room of allRooms) {
+                if (printedRooms.includes(room.name)) {
+                    continue
+                }
+                let newRoom = document.createElement('li');
+                newRoom.innerHTML = `<a href="#" id="${room.name+"btn"}">${room.name}</a>`
+                rooms.appendChild(newRoom);
+                printedRooms.push(room.name)
+                newRoom.addEventListener('click', function(e) {
+                    joinRoom(room.name);
+                })
             }
-            let newRoom = document.createElement('li');
-            newRoom.innerHTML = `<a href="#" id="${room.name+"btn"}">${room.name}</a>`
-            rooms.appendChild(newRoom);
-            printedRooms.push(room.name)
-            newRoom.addEventListener('click', function(e) {
-                joinRoom(room.name);
-            })
-        }
+        } catch (error) { console.log(error); }
     }
     const usersInRoom = (roomUsers) => {
-        if (!roomUsers || roomUsers === undefined) {
-            let item = document.createElement('li');
-            item.textContent = user
-            users.appendChild(item);
-            return console.log('room is empty')
-        }
-        for (let i of roomUsers) {
-            let item = document.createElement('li');
-            item.textContent = i;
-            users.appendChild(item);
-            console.log(roomUsers)
-        }
+        try {
+            if (!roomUsers || roomUsers === undefined) {
+                let item = document.createElement('li');
+                item.textContent = user
+                users.appendChild(item);
+                return console.log('room is empty')
+            }
+            for (let i of roomUsers) {
+                let item = document.createElement('li');
+                item.textContent = i;
+                users.appendChild(item);
+                console.log(roomUsers)
+            }
+        } catch (error) { console.log(error); }
     }
     const getGoogleAcc = () => {
         //console.log(await getData(googleURL + '-auth'));
@@ -134,27 +135,29 @@
     }
 
     const getRoomData = async(name) => {
-        let room = await getData(`${URL}/rooms/${name}`)
-        room = room[0]
-        if (!room) return console.log('room doesnt exist')
-        messages.innerHTML = '';
-        let roomMsg
-        if (room.messages === undefined) {
-            return console.log('there is no messages')
-        }
-        if (room.messages.length > 17) {
-            roomMsg = room.messages.slice(-17)
-        } else if (room.messages.length <= 17) {
-            roomMsg = room.messages.slice(-room.messages.length)
-        } else { return console.log('there is no messages') }
-        for (let i of roomMsg) {
-            let item = document.createElement('li');
-            item.textContent = `${i.user}: ${i.msg}`;
-            messages.appendChild(item);
-            messages.scrollTop = messages.scrollHeight;
-        }
+        try {
+            let room = await getData(`${URL}/rooms/${name}`)
+            room = room[0]
+            if (!room) return console.log('room doesnt exist')
+            messages.innerHTML = '';
+            let roomMsg
+            if (room.messages === undefined) {
+                return console.log('there is no messages')
+            }
+            if (room.messages.length > 17) {
+                roomMsg = room.messages.slice(-17)
+            } else if (room.messages.length <= 17) {
+                roomMsg = room.messages.slice(-room.messages.length)
+            } else { return console.log('there is no messages') }
+            for (let i of roomMsg) {
+                let item = document.createElement('li');
+                item.textContent = `${i.user}: ${i.msg}`;
+                messages.appendChild(item);
+                messages.scrollTop = messages.scrollHeight;
+            }
+        } catch (error) { console.log(error); }
     }
     getRooms()
     socket.emit('userConnected', user)
-    getGoogleAcc()
+        //getGoogleAcc()
 })();
