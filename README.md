@@ -20,3 +20,12 @@ GET /players/playerRanking: retorna les tirades del jugador (enviant el nom pel 
 # Postman
 
 L'arxiu postman esta guardat a la carpeta postman del propi projecte
+
+# Com utilitzar
+
+Per poder pasar pel middleware de la verificacio de JWT s ha de registrar un user i logejarte (amb nom i password, res mes) per rebre el header, colocar el header al postman Type: Bearer Token dins de la part d'Authorization i configurar el postman per que rebi el header a tots els requests.
+
+Post players games y Delete players ambods fan servir la :id a la ruta, no al body, s'ha de modificar i posar una id de la database que existeixi.
+
+
+

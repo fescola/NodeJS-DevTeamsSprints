@@ -1,18 +1,19 @@
 var express = require('express');
 var router = express.Router();
-const controller = require('../controllers/controller');
+const players = require('../controllers/players');
+const games = require('../controllers/games')
+const verifyToken = require('../middlewares/validate-token');
 
-
-router.post('/players', controller.postPlayers)
-router.post(`/players/:id/games`, controller.games) //
-router.put('/players', controller.putPlayers)
-router.delete(`/players/:id/games`, controller.deletePlayers)
-router.get('/players', controller.getPlayers)
-router.get('/players/:id/games', controller.getGames)
-router.get('/players/ranking', controller.ranking)
-router.get('/players/ranking/loser', controller.loser)
-router.get('/players/ranking/winner', controller.winner)
-router.get('/players/playerRanking', controller.getRanking)
+router.post('/players', verifyToken, players.postPlayers)
+router.post(`/players/:id/games`, verifyToken, games.games) //
+router.put('/players', verifyToken, players.putPlayers)
+router.delete(`/players/:id/games`, verifyToken, players.deletePlayers)
+router.get('/players', verifyToken, players.getPlayers)
+router.get('/players/:id/games', verifyToken, games.getGames)
+router.get('/players/ranking', verifyToken, games.ranking)
+router.get('/players/ranking/loser', verifyToken, games.loser)
+router.get('/players/ranking/winner', verifyToken, games.winner)
+router.get('/players/playerRanking', verifyToken, games.getRanking)
 module.exports = router;
 
 /*
