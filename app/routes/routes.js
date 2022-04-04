@@ -1,19 +1,18 @@
-
 var express = require('express');
 var router = express.Router();
 const controller = require('../controllers/controller');
 
 
-router.post('/players',controller.postPlayers)
-router.post(`/players/:id/games`,controller.games) //ID part to fix
-router.put('/players',controller.putPlayers)
-router.delete(`/players/:id/games`,controller.deletePlayers)
-router.get('/players',controller.getPlayers)
-router.get('/players/:id/games',controller.getGames)
-router.get('/players/ranking',controller.ranking)
-router.get('/players/ranking/loser',controller.loser)
-router.get('/players/ranking/winner',controller.winner)
-router.get('/players/playerRanking',controller.getRanking)
+router.post('/players', controller.postPlayers)
+router.post(`/players/:id/games`, controller.games) //
+router.put('/players', controller.putPlayers)
+router.delete(`/players/:id/games`, controller.deletePlayers)
+router.get('/players', controller.getPlayers)
+router.get('/players/:id/games', controller.getGames)
+router.get('/players/ranking', controller.ranking)
+router.get('/players/ranking/loser', controller.loser)
+router.get('/players/ranking/winner', controller.winner)
+router.get('/players/playerRanking', controller.getRanking)
 module.exports = router;
 
 /*
