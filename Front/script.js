@@ -1,6 +1,5 @@
 (() => {
     var socket = io("http://localhost:3000");
-
     var messages = document.getElementById('messages');
     var form = document.getElementById('form');
     var input = document.getElementById('input');
@@ -56,7 +55,6 @@
         getRooms()
     })
     socket.on('disconnectOldUser', function() {
-        console.log('disconnected old user');
         alert('your account connected from another device')
         socket.disconnect();
         localStorage.removeItem('username')
@@ -85,40 +83,21 @@
         } catch (error) { console.log(error); }
     }
     const usersInRoom = (roomUsers) => {
-        try {
-            if (!roomUsers || roomUsers === undefined) {
-                let item = document.createElement('li');
-                item.textContent = user
-                users.appendChild(item);
-                return console.log('room is empty')
-            }
-            for (let i of roomUsers) {
-                let item = document.createElement('li');
-                item.textContent = i;
-                users.appendChild(item);
-                console.log(roomUsers)
-            }
-        } catch (error) { console.log(error); }
-    }
-    const getGoogleAcc = () => {
-        //console.log(await getData(googleURL + '-auth'));
-        console.log(window.location.href);
-    }
-    async function getData(url = '') {
-        const response = await fetch(url, {
-            method: 'GET',
-            mode: 'cors',
-            cache: 'no-cache',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            redirect: 'follow',
-            referrerPolicy: 'no-referrer'
-        });
-        return response.json();
-    }
-    //function creates new li, adds the room if it doesnt exist and calls joinRoom, then posts the room on the server
+            try {
+                if (!roomUsers || roomUsers === undefined) {
+                    let item = document.createElement('li');
+                    item.textContent = user
+                    users.appendChild(item);
+                    return
+                }
+                for (let i of roomUsers) {
+                    let item = document.createElement('li');
+                    item.textContent = i;
+                    users.appendChild(item);
+                }
+            } catch (error) { console.log(error); }
+        }
+        //function creates new li, adds the room if it doesnt exist and calls joinRoom, then posts the room on the server
     const addNewRoom = async() => {
         let room = document.createElement('li');
         let exists = await allRooms.some(el => el.name === roomInput.value);
@@ -133,22 +112,21 @@
             roomInput.value = '';
         }
     }
-
     const getRoomData = async(name) => {
         try {
             let room = await getData(`${URL}/rooms/${name}`)
             room = room[0]
-            if (!room) return console.log('room doesnt exist')
+            if (!room) return
             messages.innerHTML = '';
             let roomMsg
             if (room.messages === undefined) {
-                return console.log('there is no messages')
+                return
             }
             if (room.messages.length > 17) {
                 roomMsg = room.messages.slice(-17)
             } else if (room.messages.length <= 17) {
                 roomMsg = room.messages.slice(-room.messages.length)
-            } else { return console.log('there is no messages') }
+            } else { return }
             for (let i of roomMsg) {
                 let item = document.createElement('li');
                 item.textContent = `${i.user}: ${i.msg}`;

@@ -63,7 +63,6 @@ async function getGoogleAccountFromCode(code) {
     const remainder = rest.join('=');
     console.log('this is code-' + remainder); // 👉️ again-later
     code = remainder
-    console.log(code);
     const auth = createConnection();
     // get the auth "tokens" from the request
     const data = await auth.getToken(code);

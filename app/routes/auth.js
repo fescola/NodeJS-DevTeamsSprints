@@ -35,7 +35,6 @@ router.post("/register", async(req, res) => {
     });
     try {
         const savedUser = await user.save();
-        console.log(`new user saved: ${savedUser}`)
         res.json({ error: null, data: savedUser });
     } catch (error) {
         res.status(400).json({ error });
@@ -68,12 +67,6 @@ router.post("/login", async(req, res) => {
         jwt: token,
         email: req.body.email
     });
-    // res.json({
-    //   error: null,
-    //   data: {
-    //     message: "Login successful",
-    //   },
-    // });
 });
 
 module.exports = router;

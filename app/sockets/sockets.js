@@ -4,9 +4,7 @@ let users = []
 
 function socket(io) {
     io.on('connection', (socket) => {
-        socket.on('disconnect', () => {
-            console.log(socket.id + ' user disconnected');
-        });
+        socket.on('disconnect', () => {});
     });
 
     io.sockets.on('connection', function(socket) {
@@ -24,8 +22,7 @@ function socket(io) {
                         }
                     }
                     users.push(data)
-                    console.log(users)
-                } else console.log('no user')
+                } else return
             } catch (error) { console.log(error); }
         })
 
@@ -36,29 +33,23 @@ function socket(io) {
                 if (searchRoom) {
                     if (socket.rooms.size > 1) {
                         socket.leave(oldRoom)
-                        console.log(`leaving ${oldRoom}`)
                     }
                     socket.join(room)
                     let roomUsers = io.sockets.adapter.rooms.get(room)
-                    console.log(roomUsers);
                     let arr = []
                     if (roomUsers != undefined) {
                         arr = [...roomUsers];
                     }
                     for (let i = 0; i < arr.length; i++) {
-                        console.log(arr[i]);
                         let found = users.find(u => u.id === arr[i])
                         arr[i] = found.name
                     }
                     io.to(room).emit("room connection", `${user} connected`, arr)
-                        //io.to(socket).emit('testingRoomUserData')
-                    console.log(`${user} joined room: ${room}`)
                 }
             } catch (e) { console.log(e) };
         });
         socket.on('chat message', (data) => {
             try {
-                console.log(data)
                 let [, room] = socket.rooms
                     //emiting to all sockets in room
                 io.to(room).emit('chat message', data)

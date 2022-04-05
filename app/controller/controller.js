@@ -10,7 +10,6 @@ const createRoom = async(req, res) => {
     });
     try {
         const savedRoom = await room.save();
-        console.log(`new room saved: ${savedRoom}`)
         res.json({ error: null, data: savedRoom });
     } catch (error) {
         res.status(400).json({ error });
@@ -34,7 +33,6 @@ const addUser = async(req, res) => {
 }
 const saveMsg = async(room, data) => {
     try {
-        console.log(room)
         await Room.findOne({ name: room }).updateOne({ $push: { messages: data } })
     } catch (error) {
         res.json({ error })

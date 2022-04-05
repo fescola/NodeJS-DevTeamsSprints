@@ -74,39 +74,6 @@
     let loginbkgrd = document.getElementById('backgroundLogin')
     let registerContainer = document.getElementById('contenedorRegister')
 
-    async function postData(url = '', data = {}) {
-        const response = await fetch(url, {
-            method: 'POST',
-            mode: 'cors', // no-cors, *cors, same-origin
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, *same-origin, omit
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            redirect: 'follow',
-            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-            body: JSON.stringify(data) // body data type must match "Content-Type" header
-        });
-        return response.json(); // parses JSON response into native JavaScript objects
-    }
-    async function postLogin(url = '', data = {}) {
-        const response = await fetch(url, {
-            method: 'POST',
-            mode: 'cors',
-            cache: 'no-cache',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json',
-                'auth-token': data.jwt
-            },
-            redirect: 'follow',
-            referrerPolicy: 'no-referrer',
-            body: JSON.stringify(data)
-        });
-        console.log(response)
-        return response.json();
-    }
-
     hideLoginRegister = () => {
         registerContainer.style.display = "none";
         loginbkgrd.style.display = "none";
@@ -138,7 +105,6 @@
     }
     if (window.location.href != 'http://127.0.0.1:5500/test/index.html#') {
         //postData(googleURL + '-auth', { url: window.location.href })
-        console.log('comeback from google login');
     }
     //googleLogin()
     registerContainer.style.display = "none";
