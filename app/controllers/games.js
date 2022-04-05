@@ -119,7 +119,6 @@ const getRanking = async(req, res) => {
         res.status(500).json(e);
     }
 }
-
 const mitjanes = async() => {
     try {
         const players = await db.Jugador.findAll()
