@@ -10,7 +10,7 @@ const games = async(req, res) => {
         if (player) {
             console.log(req.params.id)
             db.Joc.create(data)
-            res.status(200).json({ error: `Jugador: ${player.nom} Nova tirada ${data.tirada}` })
+            res.status(200).json({ msg: `Jugador: ${player.nom} Nova tirada ${data.tirada}` })
         }
         if (!player) {
             res.status(404).json({ error: 'player id not found' })
@@ -27,7 +27,7 @@ const getGames = async(req, res) => {
     }
     try {
         let jugades = await db.Joc.findAll({ where: { JugadorId: data.id } })
-        res.json(jugades)
+        res.status(200).json(jugades)
     } catch (e) {
         res.status(500).json(e);
     }
