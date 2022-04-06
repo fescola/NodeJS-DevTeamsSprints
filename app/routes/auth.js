@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/User");
-const { registerValidation, loginValidation } = require("../validation");
+const { registerValidation, loginValidation } = require("../utils/validation");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -17,6 +17,11 @@ router.post("/register", async(req, res) => {
 
     if (error) {
         return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const isUserExist = await User.findOne({ name: req.body.name });
+    if (isUserExist) {
+        return res.status(400).json({ error: "Username already exists" });
     }
 
     const isEmailExist = await User.findOne({ email: req.body.email });

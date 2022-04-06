@@ -14,8 +14,7 @@ const routes = require('./routes/routes')
 const socket = require('./sockets/sockets')
 dotenv.config();
 const authRoutes = require("./routes/auth");
-const dashboardRoutes = require("./routes/dashboard")
-const verifyToken = require("./routes/validate-token")
+const verifyToken = require("./utils/validate-token")
 const cors = require('cors')
 
 app.use(cors())
@@ -24,7 +23,7 @@ app.use(express.json());
 // route middlewares
 app.use("/api/user", authRoutes);
 //sending a GET here with our header "auth-token" set to a JWT will get us access
-app.use("/api/dashboard", verifyToken, dashboardRoutes)
+//app.use("/api/dashboard", verifyToken, dashboardRoutes)
 app.use('/', routes)
 
 server.listen(3000, () => {

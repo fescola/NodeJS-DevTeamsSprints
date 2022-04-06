@@ -31,8 +31,9 @@
         }
         postData(registerURL, data)
             .then(req => {
-                console.log(req);
-                alert('Register completed')
+                if (req.error) {
+                    alert(req.error)
+                } else alert('Register completed')
                 window.location.reload();
                 //hideLoginRegister()
             })
