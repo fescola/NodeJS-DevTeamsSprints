@@ -20,7 +20,7 @@
     })
     logout.addEventListener('click', function(e) {
         localStorage.removeItem('username')
-        window.location.reload();
+        location.reload();
     })
     registerForm.addEventListener('submit', function(e) {
         e.preventDefault();
