@@ -1,7 +1,7 @@
 
 # Xat 💬
 
-Aquesta es la entrega 5 de Node, el xat te sales que son persistents y s'accedeixen amb un click, tot esta guardat a mongoDB de forma local, per registrar usuaris nous s'ha de fer click a register, per fer login , fent click a login, pero surt per default al obrir la pagina. 
+Aquesta es la entrega 5 de Node, el xat te sales que son persistents i s'accedeixen amb un click, tot esta guardat a mongoDB de forma local, per registrar usuaris nous s'ha de fer click a register, per fer login , fent click a login, pero surt per default al obrir la pagina. 
 La web detecta si hi ha un usuari amb login anterior a traves dels localfiles, agafant el username asignat i treient el login page, portant-nos al xat directament
 
 
