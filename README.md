@@ -1,50 +1,25 @@
 
-# Node Initial Project
+# Xat 💬
 
-### Project Structure
-
-Main structure of node.js project. Folders / files:
-
-- <b>\_\_tests__</b>. Tests folder. See [Jest Docs](https://jestjs.io/es-ES/docs/configuration) and [Chai Docs](https://www.chaijs.com/)
-- <b>app</b>:
-    - <b>config</b>
-    - <b>controllers</b>
-    - <b>crons</b>
-    - <b>middleware</b>
-    - <b>models</b>
-    - <b>routes</b>
-    - <b>tmp</b>
-    - <b>app.js</b>. Entry point.
-- <b>.env</b>. Environment descriptor. See [dotenv doc](https://www.npmjs.com/package/dotenv).
-- <b>.eslintrc</b>. Linter JS, static code analyzer. See [EsLint Docs](https://eslint.org/docs/user-guide/configuring/configuration-files).
-- <b>.prettierignore</b>. Code formatter. See [Prettier Config](https://prettier.io/docs/en/configuration.html) and [Prettier Ignore](https://prettier.io/docs/en/ignore.html).
-- <b>.ecosystem.config.js</b>. Process Manage at runtime. See [PM2 Docs](https://pm2.keymetrics.io/).
-- <b>package.json</b>.
-
-### Import project for use with WebStorm
-
-Follow the steps below:
-* Clone the project from the Github Platform. Execute:
-  ```
-  git clone [url project]
-  ```
-* Open the project downloaded.
-![Open Project](img/webstorm_open.png)
+Aquesta es la entrega 5 de Node, el xat te sales que son persistents i s'accedeixen amb un click, tot esta guardat a mongoDB de forma local, per registrar usuaris nous s'ha de fer click a register, per fer login , fent click a login, pero surt per default al obrir la pagina. 
+La web detecta si hi ha un usuari amb login anterior a traves dels localfiles, agafant el username asignat i treient el login page, portant-nos al xat directament
 
 
-### Import project for use with Visual Studio Code
 
-Follow the steps below:
-* Clone the project from the Github Platform. Execute:
-  ```
-  git clone [url project]
-  ```
-* Open the project downloaded.
-  ![Open Project](img/VSC_open.png)
+# Iniciar el server:
+
+Accedir a la carpeta nodeInitialDemo (cd <tab>).
+
+Utilitzar el comandament npm start.
+
+# Iniciar el front
+
+Es pot fer tant amb el liveServer com amb l'arxiu html, ja que no crea un server per al frontend.
+
+# Estat
+
+El projecte te complets el nivell 1, el google auth encara no es funcional per varios errors.
 
 
-### Utilities
 
-* [Node Developers Guide](https://nodejs.dev/learn)
-* **.gitignore file** configuration. See [Official Docs](https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files).
-* **Git branches**. See [Official Docs](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell)
+

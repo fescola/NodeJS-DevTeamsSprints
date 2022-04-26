@@ -1,0 +1,109 @@
+.contenedorLogin {
+    position: absolute;
+    top: 15%;
+    width: 100%;
+}
+
+.contenedorRegister {
+    position: absolute;
+    top: 15%;
+    width: 100%;
+}
+
+.users {
+    background-color: aqua;
+}
+
+.chat {
+    background-color: rgb(248, 255, 254);
+    height: 100%;
+    min-height: 650px;
+    position: relative;
+    margin-top: 50px;
+}
+
+.chatbox {
+    position: absolute;
+    width: 100%;
+    bottom: 0%;
+    margin-top: 10%;
+}
+
+.backgroundLogin {
+    position: absolute;
+    top: 0%;
+    background-color: black;
+    opacity: 0.6;
+    height: 100%;
+    width: 100%;
+}
+
+.contenedorMainPage>.row>.col>h2 {
+    font-size: 8px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+#form {
+    padding: 0.25rem;
+    box-sizing: border-box;
+    bottom: 10%;
+    display: flex;
+    height: 3rem;
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+}
+
+#input {
+    background: rgba(78, 78, 78, 0.171);
+    border: 1px;
+    flex-grow: 1;
+    border-radius: 2rem;
+    margin: 0.25rem;
+}
+
+#input:focus {
+    outline: none;
+}
+
+#messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: justify;
+    height: 45vh;
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+
+#messages>li {
+    padding: 0.5rem 1rem;
+}
+
+#messages>li:nth-child(odd) {
+    background: #efefef;
+}
+
+.nav-wrapper {
+    color: #000;
+}
+
+#toast-container {
+    top: auto !important;
+    right: auto !important;
+    bottom: 50%;
+    left: 5%;
+}
+
+#logout {
+    position: relative;
+    padding-left: 10%;
+    margin-left: 20%;
+    background-color: grey;
+}
